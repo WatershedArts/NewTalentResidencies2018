@@ -6,8 +6,8 @@ New Talent Residencies 2018
 
 ### Projects
 
-* [Somestic Media](Vytan and Jon Flint/ReadMe.md)
-* [Cargo](Lawerence Hoo and Michael Jenkins/ReadMe.md)
-* [No Stone Unturned](Nicola Hogg and Alec Stevens/ReadMe.md)
+* [Somestic Media](./Vytan%20and%20Jon%20Flint/ReadMe.md)
+* [Cargo](./Lawerence%20Hoo%20and%20Michael%20Jenkins/ReadMe.md)
+* [No Stone Unturned](./Nicola%20Hogg%20and%20Alec%20Stevens/ReadMe.md)
 
 
