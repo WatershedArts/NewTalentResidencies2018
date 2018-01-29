@@ -12,15 +12,21 @@ You'll need Python 2.7.
 and the following packages:
 
 ```
-sudo pip install fbchat
+sudo pip install fbchat python-dateutil
 ```
 
 When its installed you'll need to add a new function to the Client Class.
 
-So Navigate to your python package folder.
+So On Mac navigate to your python package folder.
 
 ```
 cd /Library/Python/2.7/site-packages/fbchat
+```
+
+On Raspberry Pi Navigate to the following folder.
+
+```
+cd /usr/local/lib/python2.7/dist-packages/fbchat/client.py
 ```
 
 Then run the following commands
