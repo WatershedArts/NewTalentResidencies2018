@@ -1,18 +1,56 @@
 Facebook Project
 ==
 
-### Overview
+## Overview
 
+There are two systems active in this repo.
 
+Serverless and Serverful :)
 
-### Requirements
+### Serverless
+
+[SomesticMediaFB.py](../Facebook/SomesticMediaFB.py)
+
+You should be able to run the serverless file by entering some credentials in the .py file.
+
+Find Line 188 and replace with your credentials.
+
+Now there are two modes for this script.
+Uncomment / Comment the one you want.
+
+#### Specific
+Specific looks for a specific user in your friends and reports their last seen time until you stop the program.
+
+Alter Line 191 with the user name you want.
+
+#### All
+All loops through 100 friends in you chat window and reports their last seen time.
+
+### Serverful
+
+**Not Complete Yet**
+
+[SomesticMediaServer.py](../Facebook/SomesticMediaServer.py)
+
+Creates a local Server on your machine that handles user login and running of the last seen system.
+
+To run the script.
+
+```
+cd intothedirectory
+FLASK_APP=SomesticMediaServer.py flask run
+```
+
+Thats it.
+
+## Requirements
 
 You'll need Python 2.7.
 
 and the following packages:
 
 ```
-sudo pip install fbchat python-dateutil
+sudo pip install fbchat python-dateutil flask
 ```
 
 When its installed you'll need to add a new function to the Client Class.
@@ -161,3 +199,8 @@ When given a userid the following code should return a similar dictionary.
   }
 }
 ```
+## ToDo
+
+* Fix Error Handling
+* Styling of the Server
+* Include the LCD system
