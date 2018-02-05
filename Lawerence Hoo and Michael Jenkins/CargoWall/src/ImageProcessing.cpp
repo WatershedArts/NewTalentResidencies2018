@@ -1,0 +1,146 @@
+//
+//  ImageProcessing.cpp
+//  CargoWall
+//
+//  Created by David Haylock on 24/01/2018.
+//
+
+#include "ImageProcessing.h"
+
+//--------------------------------------------------------------
+void ImageProcessing::setup() {
+	setMode(VIDEO_PROCESSING);
+	
+	resultingImage.allocate(ofGetWidth(), ofGetHeight());
+	resultingImage.begin();
+	ofClear(0, 0, 0, 255);
+	resultingImage.end();
+	preProcessedImage.allocate(320, 240, OF_IMAGE_GRAYSCALE);
+	processedImage.allocate(320, 240, OF_IMAGE_COLOR_ALPHA);
+	
+	iFadeLevel = 10;
+	iMinArea = 5;
+	iMaxArea = 50;
+	iBrushScale = 100;
+	thresholdAmount = 100;
+	iContourThreshold = 100;
+	
+	debugImg.load("brush.png");
+	gui.setup();
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::update() {
+	ofEnableAlphaBlending();
+	
+	resultingImage.begin();
+	
+	ofSetColor(0, 0, 0,iFadeLevel);
+	ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+	switch (currentMode) {
+		case DEBUG_PROCESSING: {
+			ofSetColor(255, 255, 255);
+			float scaleX = debugImg.getWidth()/2 * float(iBrushScale * 0.01);
+			float scaleY = debugImg.getHeight()/2 * float(iBrushScale * 0.01);
+			float scaleW = debugImg.getWidth() * float(iBrushScale * 0.01);
+			float scaleH = debugImg.getHeight() * float(iBrushScale * 0.01);
+			debugImg.draw(ofGetMouseX()-(scaleX), ofGetMouseY()-(scaleY),scaleW,scaleH);
+		}
+		break;
+		case VIDEO_PROCESSING: {
+			player.update();
+			if (player.isFrameNew()) {
+				convertColor(player, preProcessedImage, CV_RGB2GRAY);
+				threshold(preProcessedImage, thresholdAmount);
+				GaussianBlur(preProcessedImage, 5);
+				contourFinder.setMinAreaRadius(iMinArea);
+				contourFinder.setMaxAreaRadius(iMaxArea);
+				contourFinder.setThreshold(thresholdAmount);
+				contourFinder.findContours(preProcessedImage);
+				Mat n,p;
+				copy(preProcessedImage,n);
+				distanceTransform(n, p, CV_DIST_C, 3);
+				normalize(p, p);
+				copy(p,preProcessedImage);
+				
+				preProcessedImage.update();
+				convertColor(preProcessedImage, processedImage, CV_GRAY2RGBA);
+				processedImage.update();
+			}
+			ofEnableBlendMode(OF_BLENDMODE_ADD);
+			ofSetColor(255,255,255,200);
+			processedImage.draw(0, 0,resultingImage.getWidth(),resultingImage.getHeight());
+			ofDisableBlendMode();
+		}
+		break;
+		case LIVE_PROCESSING:break;
+		default:break;
+	}
+	
+	resultingImage.end();
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::draw() {
+	ofPushStyle();
+	
+	resultingImage.draw(0,0);
+	player.draw(0, 0,320,240);
+	contourFinder.draw();
+	preProcessedImage.draw(0, 240,320,240);
+	ofPopStyle();
+}
+
+void ImageProcessing::drawGui() {
+	gui.begin();
+	ImGui::Text("Cargo");
+	ImGui::DragInt("Fade Amount", &iFadeLevel);
+	ImGui::DragInt("Brush Scale", &iBrushScale);
+	ImGui::Text("CV");
+	ImGui::DragInt("Min Area", &iMinArea);
+	ImGui::DragInt("Max Area", &iMaxArea);
+	ImGui::DragInt("Contour Threshold", &iContourThreshold);
+	ImGui::DragInt("Threshold Amount", &thresholdAmount);
+	gui.end();
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::drawCv() {
+	
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::setMode(IMAGE_PROCESSING_MODE newMode) {
+	
+	switch (newMode) {
+		case DEBUG_PROCESSING: {
+			grabber.close();
+			player.close();
+			
+		}
+		break;
+		case VIDEO_PROCESSING: {
+			grabber.close();
+			player.load("outofbounds.mov");
+			processedImage.allocate(player.getWidth(), player.getHeight(), OF_IMAGE_GRAYSCALE);
+			player.setSpeed(0.75);
+			player.play();
+		}
+		break;
+		case LIVE_PROCESSING: {
+			player.close();
+			grabber.setup(320, 240, false);
+		}
+		break;
+			
+		default:
+			break;
+	}
+	
+	currentMode = newMode;
+}
+
+//--------------------------------------------------------------
+ofTexture ImageProcessing::getMaskImage() {
+	return resultingImage.getTexture();
+}
