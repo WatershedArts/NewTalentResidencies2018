@@ -2,4 +2,6 @@ ofxAutoReloadedShader
 ofxCv
 ofxImGui
 ofxJSON
+ofxKinect
 ofxOpenCv
+ofxPS3EyeGrabber

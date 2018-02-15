@@ -5,6 +5,7 @@
 #include "ofxImGui.h"
 #include "ofxCv.h"
 #include "ImageProcessing.h"
+#include "ofxCenteredTrueTypeFont.h"
 
 class ofApp : public ofBaseApp{
 
@@ -15,7 +16,6 @@ class ofApp : public ofBaseApp{
 
 		void setupBuffers();
 		void drawGui();
-		void drawCv();
 	
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -29,16 +29,26 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 	
-		ofxImGui::Gui gui;
+		vector <ofPoint> drawPoints;
 	
-		bool bShowCVImages;
-		bool bDoDebugControl;
+		void drawNames();
 	
 		ImageProcessing imageProcessor;
+	
 		ofxAutoReloadedShader shader;
 		ofFbo shaderBuffer;
-
-		ofImage img;
+		ofFbo screenInfo;
 	
+		ofxImGui::Gui gui;
+	
+		ofImage image;
+		ofImage img;
 		ofVideoPlayer defaultVideo;
+	
+		ofxCenteredTrueTypeFont font;
+		bool isOpen;
+	
+		string currentSelection;
+	
+		vector<string> names;
 };

@@ -9,24 +9,17 @@
 
 //--------------------------------------------------------------
 void ImageProcessing::setup() {
-	setMode(VIDEO_PROCESSING);
+	setMode(LIVE_PROCESSING);
 	
 	resultingImage.allocate(ofGetWidth(), ofGetHeight());
 	resultingImage.begin();
 	ofClear(0, 0, 0, 255);
 	resultingImage.end();
-	preProcessedImage.allocate(320, 240, OF_IMAGE_GRAYSCALE);
-	processedImage.allocate(320, 240, OF_IMAGE_COLOR_ALPHA);
-	
-	iFadeLevel = 10;
-	iMinArea = 5;
-	iMaxArea = 50;
-	iBrushScale = 100;
-	thresholdAmount = 100;
-	iContourThreshold = 100;
-	
+	preProcessedImage.allocate(640, 480, OF_IMAGE_GRAYSCALE);
+	processedImage.allocate(640, 480, OF_IMAGE_COLOR_ALPHA);
+
 	debugImg.load("brush.png");
-	gui.setup();
+	
 }
 
 //--------------------------------------------------------------
@@ -73,7 +66,32 @@ void ImageProcessing::update() {
 			ofDisableBlendMode();
 		}
 		break;
-		case LIVE_PROCESSING:break;
+		case LIVE_PROCESSING: {
+			grabber.update();
+			if (grabber.isFrameNew()) {
+				convertColor(grabber, preProcessedImage, CV_RGB2GRAY);
+				threshold(preProcessedImage, thresholdAmount);
+				GaussianBlur(preProcessedImage, 5);
+				contourFinder.setMinAreaRadius(iMinArea);
+				contourFinder.setMaxAreaRadius(iMaxArea);
+				contourFinder.setThreshold(thresholdAmount);
+				contourFinder.findContours(preProcessedImage);
+				Mat n,p;
+				copy(preProcessedImage,n);
+				distanceTransform(n, p, CV_DIST_C, 3);
+				normalize(p, p);
+				copy(p,preProcessedImage);
+
+				preProcessedImage.update();
+				convertColor(preProcessedImage, processedImage, CV_GRAY2RGBA);
+				processedImage.update();
+			}
+			ofEnableBlendMode(OF_BLENDMODE_ADD);
+			ofSetColor(255,255,255,200);
+			processedImage.draw(0, 0,resultingImage.getWidth(),resultingImage.getHeight());
+			ofDisableBlendMode();
+			}
+			break;
 		default:break;
 	}
 	
@@ -82,31 +100,48 @@ void ImageProcessing::update() {
 
 //--------------------------------------------------------------
 void ImageProcessing::draw() {
-	ofPushStyle();
+	if (bShowCv)
+		drawCv();
 	
-	resultingImage.draw(0,0);
-	player.draw(0, 0,320,240);
-	contourFinder.draw();
-	preProcessedImage.draw(0, 240,320,240);
-	ofPopStyle();
 }
 
+//--------------------------------------------------------------
 void ImageProcessing::drawGui() {
-	gui.begin();
-	ImGui::Text("Cargo");
-	ImGui::DragInt("Fade Amount", &iFadeLevel);
-	ImGui::DragInt("Brush Scale", &iBrushScale);
-	ImGui::Text("CV");
-	ImGui::DragInt("Min Area", &iMinArea);
-	ImGui::DragInt("Max Area", &iMaxArea);
-	ImGui::DragInt("Contour Threshold", &iContourThreshold);
-	ImGui::DragInt("Threshold Amount", &thresholdAmount);
-	gui.end();
+
 }
 
 //--------------------------------------------------------------
 void ImageProcessing::drawCv() {
+	ofPushStyle();
+		ofPushMatrix();
+			ofScale((ofGetWidth()/grabber.getWidth()), (ofGetHeight()/grabber.getHeight()));
+			ofSetColor(255,iCvImagesOpacity);
+			grabber.draw(0, 0, 640, 480);
+			ofSetColor(175,0,255);
+			contourFinder.draw();
 	
+			if( bFillArea ) {
+				for (int i = 0; i < contourFinder.size(); i++) {
+					int p = contourFinder.getContour(i).size();
+					ofFill();
+					ofSetColor(255, 255, 0);
+					ofBeginShape();
+					for (int j = 0; j < p; j++) {
+						ofVertex(contourFinder.getContour(i)[j].x, contourFinder.getContour(i)[j].y);
+					}
+					ofEndShape(true);
+				}
+			}
+		ofPopMatrix();
+	ofPopStyle();
+}
+
+//--------------------------------------------------------------
+ofPoint ImageProcessing::getBiggestCoordinate() {
+	if (contourFinder.size() > 0)
+		return toOf(contourFinder.getCenter(0));
+	
+	return ofPoint(0,0);
 }
 
 //--------------------------------------------------------------
@@ -129,7 +164,21 @@ void ImageProcessing::setMode(IMAGE_PROCESSING_MODE newMode) {
 		break;
 		case LIVE_PROCESSING: {
 			player.close();
-			grabber.setup(320, 240, false);
+			grabber.setGrabber(std::make_shared<ofxPS3EyeGrabber>());
+			grabber.setup(640, 480);
+			grabber.getGrabber<ofxPS3EyeGrabber>()->setAutogain(true);
+			grabber.getGrabber<ofxPS3EyeGrabber>()->setAutoWhiteBalance(true);
+			grabber.getGrabber<ofxPS3EyeGrabber>()->setDesiredFrameRate(60);
+			
+			cameraBrightness.addListener(this, &ImageProcessing::onBrightness);
+			cameraExposure.addListener(this, &ImageProcessing::onExposure);
+			cameraGain.addListener(this, &ImageProcessing::onGain);
+			cameraContrast.addListener(this, &ImageProcessing::onContrast);
+			cameraFramerate.addListener(this, &ImageProcessing::onFramerate);
+			cameraVFlip.addListener(this, &ImageProcessing::onVFlip);
+			cameraHFlip.addListener(this, &ImageProcessing::onHFlip);
+			
+			processedImage.allocate(grabber.getWidth(), grabber.getHeight(), OF_IMAGE_GRAYSCALE);
 		}
 		break;
 			
@@ -143,4 +192,39 @@ void ImageProcessing::setMode(IMAGE_PROCESSING_MODE newMode) {
 //--------------------------------------------------------------
 ofTexture ImageProcessing::getMaskImage() {
 	return resultingImage.getTexture();
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onBrightness(int &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setBrightness(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onContrast(int &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setContrast(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onGain(int &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setGain(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onExposure(int &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setExposure(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onFramerate(int &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setDesiredFrameRate(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onVFlip(bool &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setVerticalFlip(val);
+}
+
+//--------------------------------------------------------------
+void ImageProcessing::onHFlip(bool &val) {
+	grabber.getGrabber<ofxPS3EyeGrabber>()->setHorizontalFlip(val);
 }
