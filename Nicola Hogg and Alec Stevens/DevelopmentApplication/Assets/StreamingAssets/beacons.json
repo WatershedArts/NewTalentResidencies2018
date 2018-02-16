@@ -1,0 +1,22 @@
+{
+  "beacons": [
+    {
+      "beaconid": "Beacon1",
+      "radius": 100,
+      "lat": 51.450255,
+      "lng": -2.59859,
+      "audiotrack": "",
+      "tuning": 180,
+      "genericid": 1
+    },
+    {
+      "beaconid": "Beacon2",
+      "radius": 50,
+      "lat": 51.451425,
+      "lng": -2.598375,
+      "audiotrack": "",
+      "tuning": 181,
+      "genericid": 2
+    }
+  ]
+}

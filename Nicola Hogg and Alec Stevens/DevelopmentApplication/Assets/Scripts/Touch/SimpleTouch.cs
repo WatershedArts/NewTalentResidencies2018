@@ -11,8 +11,7 @@ public class SimpleTouch : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	
-//		GetComponentsInChildren
+
 #if UNITY_EDITOR
 
 		if(Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)) {
@@ -40,7 +39,6 @@ public class SimpleTouch : MonoBehaviour {
 
 			}
 
-
 			foreach(GameObject g in touchesOld) {
 				if(!touchList.Contains(g)) {
 					g.SendMessage("OnTouchExit",hit.point,SendMessageOptions.DontRequireReceiver);
@@ -49,7 +47,6 @@ public class SimpleTouch : MonoBehaviour {
 		}
 
 #endif
-
 
 		if(Input.touchCount > 0) {
             
