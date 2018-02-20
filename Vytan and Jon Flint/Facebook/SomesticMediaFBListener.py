@@ -2,6 +2,7 @@ import sys
 import logging
 import json
 import time
+import threading
 from fbchat import Client
 from fbchat.models import *
 from datetime import datetime
@@ -21,6 +22,9 @@ print("""* Author: David Haylock
 * Creation Date: 05-02-2018
 * Copyright: (c) 2018 David Haylock""")
 print("--------------------------------------")
+
+user_last_seen = ""
+user_last_seen_timestamp = ""
 
 # -----------------------------------------------------
 # Get the Time Difference
@@ -59,33 +63,89 @@ def getopts(argv):
     return opts
 
 # -----------------------------------------------------
+# When We Launch get the Last Time So there is something to Show
+# -----------------------------------------------------
+def onStartGetLastSeenTime(client,user_id):
+    global user_last_seen
+    global user_last_seen_timestamp
+    # Get the users info based on the uid
+    user = client.fetchNewInfo(user_id)
+
+    # Check if the message thread is active
+    if user[0]["message_thread"] != None:
+
+        # Get the Last Updated Time from the Users data
+        last_timestamp = user[0]["message_thread"]["updated_time_precise"]
+        user_last_seen_timestamp = last_timestamp
+
+        # Keep a reference to the last timestamp
+        user_last_seen_blank = last_timestamp
+
+        # Make sure that the time stamp exists other wise remove it.
+        if last_timestamp != None:
+            # Convert the timestamp and insert it into the list
+            t = convertTimeAndDifference(int(last_timestamp) / 1000 )
+            user_last_seen = t
+        else:
+            # Other wise set it to be none
+            user_last_seen = ""
+        
+        print(user_last_seen)
+
+
+# -----------------------------------------------------
+# Thread for updating the Hardware
+# -----------------------------------------------------
+class HardwareThread(object):
+
+
+    def __init__(self,interval=1):
+        self.interval = interval
+        thread = threading.Thread(target=self.run,args=())
+        thread.daemon = True
+        thread.start()
+
+    def run(self):
+        global user_last_seen
+        global user_last_seen_timestamp
+        while True:
+            tm = 0
+           
+            if len(str(user_last_seen_timestamp)) == 13:
+                tm = convertTimeAndDifference(int(user_last_seen_timestamp) / 1000)
+            else: 
+                tm = convertTimeAndDifference(int(user_last_seen_timestamp))
+
+            print(user_last_seen_timestamp) 
+            print(tm)
+            time.sleep(self.interval)
+
+# -----------------------------------------------------
 # Listening Client
 # -----------------------------------------------------
 class ListeningClient(Client):
-    def onChatTimestamp(self, buddylist, msg):
+    def onUnknownMesssageType(self,msg=None):
         global user_id
-        print(datetime.now())
-        # Loop through the list of people
-        for id,time in buddylist.items():
-            print("")
-            
-            print(str(id) + " " + str(convertTimeAndDifference(time)))
-            # Check the User ID against the ones in the buddy list
-            # if it matches the ids, return the timestamp and pass it through the link
-            if id == user_id:
-                diff = convertTimeAndDifference(time)
+        global user_last_seen
+        global user_last_seen_timestamp
+        
+        if msg.get('type') == 'buddylist_overlay' and msg.get('overlay'):
+            for userid, data in msg['overlay'].items():
+                print('{} changed their activeness status to {}. The data was: {}'
+                    .format(user_id, data.get('a'), data))
 
-                # To Parse the Last Seen Data
-                print("Years " + str(diff.years))
-                print("Months " + str(diff.months))
-                print("Days " + str(diff.days))
-                print("Hours " + str(diff.hours))
-                print("Minutes " + str(diff.minutes))
-                print("Seconds " + str(diff.seconds))
-                print("Microseconds " + str(diff.microseconds))
+                active_status = data.get('a')
 
-                # print(diff)
-
+                if userid == user_id:
+                    
+                    if data.get('la') != None:
+                        print("We have lift off")
+                        user_last_seen_timestamp = data.get('la')
+                        user_last_seen = convertTimeAndDifference(user_last_seen_timestamp)
+                    else:
+                        user_last_seen_timestamp = int(time.time())
+                        user_last_seen = convertTimeAndDifference(user_last_seen_timestamp)
+                      
 # -----------------------------------------------------
 # Main Program
 # -----------------------------------------------------
@@ -116,10 +176,15 @@ if __name__ == '__main__':
     password = myargs['-p']
 
     # Load previous cookies 
-    # session_cookies = json.load(open("session.json"))
+    session_cookies = json.load(open("session.json"))
         
     # Open the Client Object
-    client = ListeningClient(username, password)#,session_cookies=session_cookies)
+    client = ListeningClient(username, password,session_cookies=session_cookies)
+
+    # Grab a Timestamp just to start the system off
+    onStartGetLastSeenTime(client,user_id)
+
+    example = HardwareThread()
 
     try:
         client.listen()

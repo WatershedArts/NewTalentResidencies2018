@@ -113,7 +113,7 @@ def startAlarmClock():
         # 1: -i the specified user id you want to track
         # 2: -u the user who has logged into the systems email address
         # 3: -p the user who has logged into the systems password
-        cmdstr = "python SomesticMediaFBAlarm.py -i %s -u %s -p %s" % (searched_user_id,username,password)
+        cmdstr = "python SomesticMediaFBListener.py -i %s -u %s -p %s" % (searched_user_id,username,password)
 
         # Show the Command
         print(cmdstr)
