@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-using LitJson;
-
 public class BeaconManager : MonoBehaviour {
 
 	public Beacon prefab;
@@ -13,9 +11,9 @@ public class BeaconManager : MonoBehaviour {
 	public List<Beacon> beacons = new List<Beacon>();
 	public BeaconCollection beaconsData;
 
-	//----------------------------------------------------
+	//---------------------------------------------------------------
 	// Load the Beacons from the Json File
-	//----------------------------------------------------
+	//---------------------------------------------------------------
 	void LoadBeacons(string path) {
 		path = Application.streamingAssetsPath + "/" + path;
 

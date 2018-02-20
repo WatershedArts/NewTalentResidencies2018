@@ -16,6 +16,30 @@ struct Position {
 	public double Longitude;
 };
 
+public static class ExtensionMethods {
+
+	public static float Map (this float value, float from1, float to1, float from2, float to2) {
+		return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+	}
+
+	public static double toRadians(this double value) {
+		return value * Mathf.PI / 180.0f;
+	}
+
+	public static double toDegrees(this double value) {
+		return value * 180.0f / Mathf.PI;
+	}
+
+	public static float toRadians(this float value) {
+		return value * Mathf.PI / 180.0f;
+	}
+
+	public static float toDegrees(this float value) {
+		return value * 180.0f / Mathf.PI;
+	}
+
+}
+
 //----------------------------------------------------
 // Collection 
 //----------------------------------------------------
@@ -52,9 +76,9 @@ public class Beacon : MonoBehaviour {
 	private bool hasUserEntered = false;
 	private bool isPlaying = false;
 
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	// Init Beacon
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	public Beacon(BeaconData d) {
 		this.data = d;
 	}
@@ -63,33 +87,17 @@ public class Beacon : MonoBehaviour {
 		this.data = d;
 	}
 
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	// Get the Beacon ID
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	public string getBeaconId() {
 		return data.beaconid;
 	}
-
-	//-----------------------------------------------------------------------------
-	// Helper Function for Converting Degrees to Radians
-	//
-	//-----------------------------------------------------------------------------
-	double toRadians(double degrees) {
-		return degrees * Mathf.PI / 180.0f;
-	}
-
-	//-----------------------------------------------------------------------------
-	// Helper Function for Converting radians to Degrees
-	//
-	//-----------------------------------------------------------------------------
-	double toDegrees(double radians) {
-		return radians * 180.0f / Mathf.PI;
-	}
-		
-	//-----------------------------------------------------------------------------
+				
+	//---------------------------------------------------------------
 	// Get the Current User GPS coords
 	// 
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	public void setCurrentGPSCoords(double userlat,double userlng) {
 		
 		// Compute the Distance
@@ -111,26 +119,26 @@ public class Beacon : MonoBehaviour {
 		}
 	}
 		
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	// Compute Haversine Distance between the beacon and the user
 	// @param: userLat: users latitude
 	// @param: userLng: users longitude
 	// @return c: the distance in meters
-	//-----------------------------------------------------------------------------
+	//---------------------------------------------------------------
 	double computeDistanceFromUserToSelf(Position pos1, Position pos2) {
 
 		// Earth's Radius in Kilometres
 		double R = 6371;  
 
 		// Calculate the Theata
-		double dLat = toRadians(pos2.Latitude - pos1.Latitude);  
-		double dLon = toRadians(pos2.Longitude - pos1.Longitude);  
+		double dLat = (pos2.Latitude - pos1.Latitude).toRadians();  
+		double dLon = (pos2.Longitude - pos1.Longitude).toRadians();  
 
 		// Do Conversion to Globe coordinates
 		double a = Mathf.Sin((float)(dLat / 2)) * 
 			Mathf.Sin((float)(dLat / 2)) +  
-			Mathf.Cos((float)(toRadians(pos1.Latitude))) * 
-			Mathf.Cos((float)(toRadians(pos2.Latitude))) *  
+			Mathf.Cos((float)( pos1.Latitude.toRadians() )) * 
+			Mathf.Cos((float)( pos2.Latitude.toRadians() )) *  
 			Mathf.Sin((float)(dLon / 2)) * 
 			Mathf.Sin((float)(dLon / 2));  
 

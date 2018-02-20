@@ -9,9 +9,6 @@ public class GPSManager : MonoBehaviour {
 	public float lat;
 	public float lng;
 
-	public Slider latSlider;
-	public Slider lngSlider;
-
 	#if UNITY_EDITOR
 		private void Start() {
 			Instance = this;

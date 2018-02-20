@@ -1,11 +1,15 @@
 ﻿using UnityEngine.Audio;
 using UnityEngine;
 
+//---------------------------------------------------------------
 public class AudioManager : MonoBehaviour {
 
 	public Sound[] sounds;
 	public static AudioManager instance;
 
+	//---------------------------------------------------------------
+	// On Awake Action
+	//---------------------------------------------------------------
 	void Awake() {
 
 		if( instance == null ) {
@@ -25,6 +29,9 @@ public class AudioManager : MonoBehaviour {
 		}
 	}
 
+	//---------------------------------------------------------------
+	// Play Specific Beacon Audio 
+	//---------------------------------------------------------------
 	public void Play(string name) {
 		Sound s = System.Array.Find(sounds,sound => sound.name == name);
 		if( s == null ) {
@@ -34,6 +41,9 @@ public class AudioManager : MonoBehaviour {
 		s.source.Play();
 	}
 
+	//---------------------------------------------------------------
+	// Stop Beacon Audio
+	//---------------------------------------------------------------
 	public void Stop(string name) {
 		Sound s = System.Array.Find(sounds,sound => sound.name == name);
 		if( s == null ) {

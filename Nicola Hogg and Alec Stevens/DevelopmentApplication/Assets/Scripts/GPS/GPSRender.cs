@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class GPSRender : MonoBehaviour {
 
-	public Text latitude;
-	public Text longitude;
+    public TextMeshProUGUI latitude;
+    public TextMeshProUGUI longitude;
 
 	// Update is called once per frame
 	void Update () {
-		latitude.text = GPSManager.Instance.lat.ToString();
-		longitude.text = GPSManager.Instance.lng.ToString();
+        latitude.SetText( GPSManager.Instance.lat.ToString() );
+        longitude.SetText( GPSManager.Instance.lng.ToString() );
 	}
 }
