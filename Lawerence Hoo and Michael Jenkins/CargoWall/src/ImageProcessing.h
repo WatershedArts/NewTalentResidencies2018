@@ -13,6 +13,7 @@
 #include "ofxCv.h"
 #include "ofxImGui.h"
 #include "ofxPS3EyeGrabber.h"
+#include "CalibrationManager.h"
 
 enum IMAGE_PROCESSING_MODE {
 	DEBUG_PROCESSING = 0,
@@ -22,11 +23,6 @@ enum IMAGE_PROCESSING_MODE {
 
 using namespace cv;
 using namespace ofxCv;
-
-
-const float diffThreshold = 2.5; // maximum amount of movement
-const float timeThreshold = 1; // minimum time between snapshots
-const int startCleaning = 10; // start cleaning outliers after this many samples
 
 class ImageProcessing {
 	public:
@@ -100,6 +96,9 @@ class ImageProcessing {
 			@return parameters
 		*/
 		//--------------------------------------------------------------
+	
+		CalibrationManager calibrationManager;
+	
 		ofParameterGroup getParameters();
 	
 		ofParameter<bool> bShowCv{"Show CV", false};
@@ -113,7 +112,7 @@ class ImageProcessing {
 		ofParameter<int> iContourThreshold{"Contour Threshold",100,1,255};
 	
 	
-		ofParameterGroup imageProc{ "Image Processing",bShowCv,iCvImagesOpacity,bFillArea,iFadeLevel,iBrushScale,thresholdAmount,iMaxArea,iMinArea,iContourThreshold};
+		ofParameterGroup imageProc{ "Image Processing",bShowCv,iCvImagesOpacity,bFillArea,iFadeLevel,iBrushScale,thresholdAmount,iMaxArea,iMinArea,iContourThreshold,calibrationManager.active };
 	
 		ofParameter<int> cameraBrightness{"Camera Brightness", 128,0,255};
 		ofParameter<int> cameraExposure{"Camera Exposure", 128,0,255};
@@ -122,7 +121,7 @@ class ImageProcessing {
 		ofParameter<int> cameraFramerate{"Camera Framerate",60,0,120};
 		ofParameter<bool> cameraVFlip{"Flip V", false};
 		ofParameter<bool> cameraHFlip{"Flip H", false};
-	ofParameterGroup cameraSettings{"Camera Settings",cameraBrightness,cameraExposure,cameraGain,cameraContrast,cameraFramerate,cameraVFlip,cameraHFlip};
+		ofParameterGroup cameraSettings{"Camera Settings",cameraBrightness,cameraExposure,cameraGain,cameraContrast,cameraFramerate,cameraVFlip,cameraHFlip};
 	
 	
 		void onBrightness(int &val);

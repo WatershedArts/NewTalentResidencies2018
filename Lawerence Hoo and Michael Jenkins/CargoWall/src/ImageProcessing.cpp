@@ -69,6 +69,7 @@ void ImageProcessing::update() {
 		case LIVE_PROCESSING: {
 			grabber.update();
 			if (grabber.isFrameNew()) {
+				calibrationManager.update(toCv(grabber));
 				convertColor(grabber, preProcessedImage, CV_RGB2GRAY);
 				threshold(preProcessedImage, thresholdAmount);
 				GaussianBlur(preProcessedImage, 5);
@@ -100,8 +101,10 @@ void ImageProcessing::update() {
 
 //--------------------------------------------------------------
 void ImageProcessing::draw() {
-	if (bShowCv)
+	if (bShowCv) {
 		drawCv();
+		calibrationManager.draw();
+	}
 	
 }
 
@@ -169,6 +172,8 @@ void ImageProcessing::setMode(IMAGE_PROCESSING_MODE newMode) {
 			grabber.getGrabber<ofxPS3EyeGrabber>()->setAutogain(true);
 			grabber.getGrabber<ofxPS3EyeGrabber>()->setAutoWhiteBalance(true);
 			grabber.getGrabber<ofxPS3EyeGrabber>()->setDesiredFrameRate(60);
+			
+			calibrationManager.setup(toCv(grabber));
 			
 			cameraBrightness.addListener(this, &ImageProcessing::onBrightness);
 			cameraExposure.addListener(this, &ImageProcessing::onExposure);

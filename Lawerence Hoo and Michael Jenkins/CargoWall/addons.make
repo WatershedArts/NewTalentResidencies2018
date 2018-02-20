@@ -1,5 +1,6 @@
 ofxAutoReloadedShader
 ofxCv
+ofxCvCameraProjectorCalibration
 ofxImGui
 ofxJSON
 ofxKinect
