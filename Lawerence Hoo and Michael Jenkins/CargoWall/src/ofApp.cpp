@@ -211,15 +211,12 @@ void ofApp::setup() {
 	names.push_back("don't");
 	names.push_back("need");
 	names.push_back("heroes");
-
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
 	defaultVideo.update();
 	imageProcessor.update();
-	
-	
 }
 
 //--------------------------------------------------------------
@@ -280,13 +277,43 @@ void ofApp::draw() {
 	// Draw so
 	imageProcessor.draw();
 	
-	auto settings = ofxImGui::Settings();
-	
-	ofDrawBitmapStringHighlight(currentSelection,15,15);
-	
+	auto mainSettings = ofxImGui::Settings();
+	mainSettings.windowPos = ofVec2f(ofGetWidth()-200,10);
+	mainSettings.windowSize = ofVec2f(200,10);
 	gui.begin();
-	ofxImGui::AddGroup(imageProcessor.imageProc,settings);
-	ofxImGui::AddGroup(imageProcessor.cameraSettings,settings);
+	
+	if (ofxImGui::BeginWindow("Settings", mainSettings, false))
+	{
+		if(ofxImGui::BeginTree(this->imageProcessor.imageProc, mainSettings)) {
+			
+			ofxImGui::AddParameter(this->imageProcessor.bShowCv);
+			ofxImGui::AddParameter(this->imageProcessor.bShowCvCalibration);
+			ofxImGui::AddParameter(this->imageProcessor.bFillArea);
+			ofxImGui::AddParameter(this->imageProcessor.cvImagesOpacity);
+			ofxImGui::AddParameter(this->imageProcessor.fadeLevel);
+			ofxImGui::AddParameter(this->imageProcessor.brushScale);
+			ofxImGui::AddParameter(this->imageProcessor.thresholdAmount);
+			ofxImGui::AddParameter(this->imageProcessor.maxArea);
+			ofxImGui::AddParameter(this->imageProcessor.minArea);
+			ofxImGui::AddParameter(this->imageProcessor.contourThreshold);
+			ofxImGui::EndTree(mainSettings);
+		}
+		
+		if(ofxImGui::BeginTree(this->imageProcessor.cameraSettings, mainSettings)) {
+			ofxImGui::AddParameter(this->imageProcessor.cameraBrightness);
+			ofxImGui::AddParameter(this->imageProcessor.cameraExposure);
+			ofxImGui::AddParameter(this->imageProcessor.cameraGain);
+			ofxImGui::AddParameter(this->imageProcessor.cameraContrast);
+			ofxImGui::AddParameter(this->imageProcessor.cameraFramerate);
+			ofxImGui::AddParameter(this->imageProcessor.cameraVFlip);
+			ofxImGui::AddParameter(this->imageProcessor.cameraHFlip);
+			ofxImGui::EndTree(mainSettings);
+		}
+		
+//		ofxImGui::AddGroup(imageProcessor.imageProc,settings);
+//		ofxImGui::AddGroup(imageProcessor.cameraSettings,settings);
+	}
+	ofxImGui::EndWindow(mainSettings);
 	gui.end();
 }
 
@@ -294,9 +321,9 @@ void ofApp::draw() {
 void ofApp::keyPressed(int key){
 	
 	switch (key) {
-		case 'd': imageProcessor.setMode(DEBUG_PROCESSING); break;
-		case 'v': imageProcessor.setMode(VIDEO_PROCESSING); break;
-		case 'l': imageProcessor.setMode(LIVE_PROCESSING); break;
+//		case 'd': imageProcessor.setMode(DEBUG_PROCESSING); break;
+//		case 'v': imageProcessor.setMode(VIDEO_PROCESSING); break;
+//		case 's': imageSelection.saveToFile("w.xml"); break;
 		default:break;
 	}
 }
@@ -313,12 +340,12 @@ void ofApp::mouseMoved(int x, int y ){
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
+//	imageSelection.updatePoint(x, y, 0, 0, 640, 480);
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+//	imageSelection.selectPoint(x, y, 0, 0, 640, 480, 30);
 }
 
 //--------------------------------------------------------------

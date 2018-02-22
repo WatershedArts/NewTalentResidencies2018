@@ -13,7 +13,7 @@
 #include "ofxCv.h"
 #include "ofxImGui.h"
 #include "ofxPS3EyeGrabber.h"
-#include "CalibrationManager.h"
+#include "ImageSelection.h"
 
 enum IMAGE_PROCESSING_MODE {
 	DEBUG_PROCESSING = 0,
@@ -97,22 +97,22 @@ class ImageProcessing {
 		*/
 		//--------------------------------------------------------------
 	
-		CalibrationManager calibrationManager;
 	
 		ofParameterGroup getParameters();
 	
 		ofParameter<bool> bShowCv{"Show CV", false};
-		ofParameter<int> iCvImagesOpacity{"CV Images Opacity", 64, 1,255};
-		ofParameter<bool> bFillArea{"Fill Area", false};
-		ofParameter<int> iFadeLevel{"Fade Level", 1, 1,255};
-		ofParameter<int> iBrushScale{"Brush Scale",5,25,100};
+		ofParameter<bool> bShowCvCalibration{"Show CV Calibratoin", false};
+		ofParameter<int> cvImagesOpacity{"CV Images Opacity", 64, 1,255};
+		ofParameter<bool> bFillArea{"Fill Blob Area", false};
+		ofParameter<int> fadeLevel{"Fade Level", 1, 1,255};
+		ofParameter<int> brushScale{"Brush Scale",5,25,100};
 		ofParameter<int> thresholdAmount{"Image Threshold",230,0,255};
-		ofParameter<int> iMaxArea{"Max Tracking Size", 150,1,500};
-		ofParameter<int> iMinArea{"Min Tracking Size", 30,1,500};
-		ofParameter<int> iContourThreshold{"Contour Threshold",100,1,255};
+		ofParameter<int> maxArea{"Max Tracking Size", 150,1,500};
+		ofParameter<int> minArea{"Min Tracking Size", 30,1,500};
+		ofParameter<int> contourThreshold{"Contour Threshold",100,1,255};
 	
 	
-		ofParameterGroup imageProc{ "Image Processing",bShowCv,iCvImagesOpacity,bFillArea,iFadeLevel,iBrushScale,thresholdAmount,iMaxArea,iMinArea,iContourThreshold,calibrationManager.active };
+		ofParameterGroup imageProc{ "Image Processing",bShowCv,bShowCvCalibration,cvImagesOpacity,bFillArea,fadeLevel,brushScale,thresholdAmount,maxArea,minArea,contourThreshold };
 	
 		ofParameter<int> cameraBrightness{"Camera Brightness", 128,0,255};
 		ofParameter<int> cameraExposure{"Camera Exposure", 128,0,255};
@@ -132,11 +132,16 @@ class ImageProcessing {
 		void onVFlip(bool &val);
 		void onHFlip(bool &val);
 	
+		ImageSelection imageSelection;
+	
 	private:
 		ofVideoPlayer player;
 		
 		ofVideoGrabber grabber;
 		ofFbo resultingImage;
+	
+		Mat selectedImage;
+		Mat croppedImage;
 	
 		IMAGE_PROCESSING_MODE currentMode;
 		ofxImGui::Gui gui;
@@ -145,6 +150,9 @@ class ImageProcessing {
 		ofImage processedImage;
 		ofxCv::ContourFinder contourFinder;
 	
+		void mousePressed(ofMouseEventArgs &e);
+		void mouseReleased(ofMouseEventArgs &e);
+		void mouseDragged(ofMouseEventArgs &e);
 };
 
 #endif /* ImageProcessing_h */

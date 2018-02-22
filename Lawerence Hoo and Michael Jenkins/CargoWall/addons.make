@@ -6,3 +6,4 @@ ofxJSON
 ofxKinect
 ofxOpenCv
 ofxPS3EyeGrabber
+ofxXmlSettings

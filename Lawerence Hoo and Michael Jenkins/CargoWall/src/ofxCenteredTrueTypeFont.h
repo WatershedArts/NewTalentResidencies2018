@@ -14,8 +14,7 @@ public:
 	 * This method gets the offset of the string s.
 	 */
 	//-----------------------------------------------------
-	ofVec2f getOffset( string s )
-	{
+	ofVec2f getOffset( string s ) {
 		ofRectangle r = getStringBoundingBox(s, 0, 0);
 		return ofVec2f( floor(-r.x - r.width * 0.5f), floor(-r.y - r.height * 0.5f) );
 	}
@@ -30,8 +29,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCentered(string s, float x, float y, bool asVector = false)
-	{
+	void drawStringCentered(string s, float x, float y, bool asVector = false) {
 		ofVec2f offset = getOffset(s);
 		if (!asVector)
 			drawString(s, x + offset.x, y + offset.y);
@@ -48,8 +46,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCentered(string s, ofVec2f pos, bool asVector = false)
-	{
+	void drawStringCentered(string s, ofVec2f pos, bool asVector = false) {
 		drawStringCentered(s, pos.x, pos.y, asVector);
 	}
 	
@@ -62,8 +59,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawCenteredBoundingBox(string s, float x, float y, float padding = 0)
-	{
+	void drawCenteredBoundingBox(string s, float x, float y, float padding = 0) {
 		ofRectangle r = getStringBoundingBox(s, 0, 0);
 		r.x -= padding;
 		r.y -= padding;
@@ -83,8 +79,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawCenteredBoundingBox(string s, ofVec2f pos, float padding = 0)
-	{
+	void drawCenteredBoundingBox(string s, ofVec2f pos, float padding = 0) {
 		drawCenteredBoundingBox(s, pos.x, pos.y, padding);
 	}
 	
@@ -97,8 +92,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCenteredVertically(string s, float x, float y)
-	{
+	void drawStringCenteredVertically(string s, float x, float y) {
 		ofVec2f offset = getOffset(s);
 		drawString(s, x, y + offset.y );
 	}
@@ -112,8 +106,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCenteredVertically(string s, ofVec2f pos)
-	{
+	void drawStringCenteredVertically(string s, ofVec2f pos) {
 		drawStringCenteredVertically(s, pos.x, pos.y);
 	}
 	
@@ -126,8 +119,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCenteredHorizontally(string s, float x, float y)
-	{
+	void drawStringCenteredHorizontally(string s, float x, float y) {
 		ofVec2f offset = getOffset(s);
 		drawString(s, x + offset.x, y);
 	}
@@ -141,8 +133,7 @@ public:
 	 * This method draws the string central
 	 */
 	//-----------------------------------------------------
-	void drawStringCenteredHorizontally(string s, ofVec2f pos)
-	{
+	void drawStringCenteredHorizontally(string s, ofVec2f pos) {
 		drawStringCenteredHorizontally(s, pos.x, pos.y);
 	}
 };
