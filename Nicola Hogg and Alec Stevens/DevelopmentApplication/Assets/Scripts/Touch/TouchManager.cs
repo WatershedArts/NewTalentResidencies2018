@@ -33,45 +33,45 @@ public class TouchManager : MonoBehaviour {
 	public Transform[] fingers;
 	public TouchDial dial;
     bool isPlaying = false;
-	//----------------------------------------------------
-	// Update Loop
-	//----------------------------------------------------
-	void Update () 
+    //----------------------------------------------------
+    // Update Loop
+    //----------------------------------------------------
+    void Update()
     {
-		#if UNITY_EDITOR 
-			if(Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0)) {
-				Vector2 mouse = Input.mousePosition;
-				fingers[0].transform.position = mouse;
-			}
-
-        angle.SetText(" Orig Rot: {0} Mapped Rot: {1:1} ", dial.orientation, (float)(dial.orientation.Map(0.0f, 360.0f, 90.0f, 106.0f)));
-            tunerSlider.value = dial.orientation;
-            print((float)(dial.orientation.Map(0.0f, 360.0f, 90.0f, 106.0f)));
-            float d = dial.orientation.Map(0f, 360f, 90.0f, 106.0f);
-            if ((d > 101.5f && d < 102.5) && !isPlaying)
-            {
-                FindObjectOfType<AudioManager>().Play("Beacon1");
-                isPlaying = true;
-            }
-            else if ((d < 101.5f && d > 102.5) && isPlaying)
-            {
-                FindObjectOfType<AudioManager>().Stop("Beacon1");
-                isPlaying = false;
-            }
-
-		#endif
-
-	
-		if( Input.touchCount == 3 ) 
+#if UNITY_EDITOR
+        if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
         {
-			calculateDial(Input.touches);
-			for(int i = 0; i < Input.touchCount; i++ ) 
-            {
-				fingers[i].transform.position = new Vector3(Input.touches[i].position.x,Input.touches[i].position.y,0.0f);
-			}
+            Vector2 mouse = Input.mousePosition;
+            fingers[0].transform.position = mouse;
         }
-	}
 
+        float d = dial.orientation.Map(0f, 360f, 88.0f, 108.0f);
+        angle.SetText(" Orig Rot: {0} Mapped Rot: {1:1} ", dial.orientation, d);
+        tunerSlider.value = d;
+
+        if ((d > 101.5f && d < 102.5) && !isPlaying)
+        {
+            FindObjectOfType<AudioManager>().Play("Beacon1");
+            isPlaying = true;
+        }
+        else if ((d < 101.5f && d > 102.5) && isPlaying)
+        {
+            FindObjectOfType<AudioManager>().Stop("Beacon1");
+            isPlaying = false;
+        }
+
+#endif
+
+
+        if (Input.touchCount == 3)
+        {
+            calculateDial(Input.touches);
+            for (int i = 0; i < Input.touchCount; i++)
+            {
+                fingers[i].transform.position = new Vector3(Input.touches[i].position.x, Input.touches[i].position.y, 0.0f);
+            }
+        }
+    }
 
 	//----------------------------------------------------
 	// Calculate the Dial from the Touches
@@ -86,10 +86,11 @@ public class TouchManager : MonoBehaviour {
 		dial.orientation = calculateOrientation(touches,topIndex);
 		dial.apex = topIndex;
 
-        angle.SetText("Orig Rot: {0} Mapped Rot: {1.0f}", dial.orientation,dial.orientation.Map(0.0f, 360.0f, 90.0f, 106.0f));
-        tunerSlider.value = dial.orientation;
+        float d = dial.orientation.Map(0f, 360f, 88.0f, 108.0f);
+        angle.SetText("Orig Rot: {0} Mapped Rot: {1.0}", dial.orientation,d);
+        tunerSlider.value = d;
 
-        float d = dial.orientation.Map(0f, 360f, 90f, 106f);
+
         if ((d > 101.5f && d < 102.5) && !isPlaying) {
             FindObjectOfType<AudioManager>().Play("Beacon1");
             isPlaying = true;
