@@ -50,6 +50,9 @@ void ofApp::setup() {
 	isOpen = true;
 	currentSelection = "";
 	
+	visualManager.setup();
+	
+	
 	int spacingWidth = ofGetWidth() / 12;
 	int spacingHeight = ofGetHeight() / 12;
 	
@@ -227,18 +230,20 @@ void ofApp::draw() {
 	ofPoint torch = imageProcessor.getBiggestCoordinate();
 	torch *= ofPoint(scaleW,scaleH);
 	
+//
+//	for (int i = 0; i < names.size(); i++) {
+//		if (ofDist(torch.x, torch.y, drawPoints[i].x, drawPoints[i].y) < 20) {
+//			ofSetColor(255, 0, 0, 255);
+//			currentSelection = names[i];
+//		}
+//		else {
+//			ofSetColor(255, 255, 255, 200);
+//		}
+//
+//		font.drawStringCentered(names[i], drawPoints[i].x, drawPoints[i].y);
+//	}
 	
-	for (int i = 0; i < names.size(); i++) {
-		if (ofDist(torch.x, torch.y, drawPoints[i].x, drawPoints[i].y) < 20) {
-			ofSetColor(255, 0, 0, 255);
-			currentSelection = names[i];
-		}
-		else {
-			ofSetColor(255, 255, 255, 200);
-		}
-
-		font.drawStringCentered(names[i], drawPoints[i].x, drawPoints[i].y);
-	}
+	visualManager.draw();
 	screenInfo.end();
 	
 	// Background to Black
@@ -274,16 +279,39 @@ void ofApp::draw() {
 	
 	ofSetColor(ofColor::white);
 	
-	// Draw so
+	// Draw Stuff
 	imageProcessor.draw();
 	
+	if(showContentPreview)
+		screenInfo.draw(ofGetWidth() - ofGetWidth()/6,ofGetHeight() - ofGetHeight()/6,ofGetWidth()/6,ofGetHeight()/6);
+	
+	drawGui();
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(int key){
+	
+	switch (key) {
+//		case 'd': imageProcessor.setMode(DEBUG_PROCESSING); break;
+//		case 'v': imageProcessor.setMode(VIDEO_PROCESSING); break;
+//		case 's': imageSelection.saveToFile("w.xml"); break;
+		default:break;
+	}
+}
+
+//--------------------------------------------------------------
+void ofApp::drawGui() {
 	auto mainSettings = ofxImGui::Settings();
-	mainSettings.windowPos = ofVec2f(ofGetWidth()-200,10);
-	mainSettings.windowSize = ofVec2f(200,10);
+	mainSettings.windowPos = ofVec2f(ofGetWidth()-400,10);
+	mainSettings.windowSize = ofVec2f(400,10);
 	gui.begin();
 	
 	if (ofxImGui::BeginWindow("Settings", mainSettings, false))
 	{
+		ofxImGui::AddParameter(showContentPreview);
+		static const vector<string> labels = { "Video", "Text", "Animation","Shaders" };
+		ofxImGui::AddRadio(this->visualManager.currentMode, labels, 4);
+		
 		if(ofxImGui::BeginTree(this->imageProcessor.imageProc, mainSettings)) {
 			
 			ofxImGui::AddParameter(this->imageProcessor.bShowCv);
@@ -309,71 +337,7 @@ void ofApp::draw() {
 			ofxImGui::AddParameter(this->imageProcessor.cameraHFlip);
 			ofxImGui::EndTree(mainSettings);
 		}
-		
-//		ofxImGui::AddGroup(imageProcessor.imageProc,settings);
-//		ofxImGui::AddGroup(imageProcessor.cameraSettings,settings);
 	}
 	ofxImGui::EndWindow(mainSettings);
 	gui.end();
-}
-
-//--------------------------------------------------------------
-void ofApp::keyPressed(int key){
-	
-	switch (key) {
-//		case 'd': imageProcessor.setMode(DEBUG_PROCESSING); break;
-//		case 'v': imageProcessor.setMode(VIDEO_PROCESSING); break;
-//		case 's': imageSelection.saveToFile("w.xml"); break;
-		default:break;
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-//	imageSelection.updatePoint(x, y, 0, 0, 640, 480);
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-//	imageSelection.selectPoint(x, y, 0, 0, 640, 480, 30);
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
-
 }
