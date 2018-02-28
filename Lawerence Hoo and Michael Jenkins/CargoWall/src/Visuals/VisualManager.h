@@ -10,6 +10,8 @@
 
 #include <stdio.h>
 #include "Videos.h"
+#include "Poems.h"
+#include "Photos.h"
 #include "ofxImGui.h"
 
 enum class VisualMode {
@@ -29,8 +31,13 @@ class VisualManager {
 //		VisualMode currentMode;
 	
 		Videos videoHandler;
+		Poems poemHandler;
+		Photos photoHandler;
 	
 		ofParameter<int> currentMode { "Visual Mode", static_cast<int>(VisualMode::VIDEOS) };
+	
+		ofParameter<bool> previousPoem {"Previous Poem",false};
+		ofParameter<bool> nextPoem {"Next Poem",false};
 };
 
 #endif /* VisualManager_h */

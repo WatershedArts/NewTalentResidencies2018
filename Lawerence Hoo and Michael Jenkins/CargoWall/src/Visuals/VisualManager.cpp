@@ -10,7 +10,9 @@
 //--------------------------------------------------------------
 void VisualManager::setup() {
 //	currentMode = VIDEOS;
-	videoHandler.loadDirectory("videos");
+	videoHandler.loadDirectory("Visuals/videos");
+	poemHandler.loadPoems("Visuals/poems");
+	photoHandler.loadPhotos("Visuals/photos");
 }
 
 //--------------------------------------------------------------
@@ -21,8 +23,14 @@ void VisualManager::update() {
 //--------------------------------------------------------------
 void VisualManager::draw() {
 	switch (currentMode) {
-		case 0: // Think this is Vidoes
+		case 0:
 			videoHandler.draw();
+			break;
+		case 1:
+			poemHandler.draw();
+			break;
+		case 2:
+			photoHandler.draw();
 			break;
 		default:
 			break;
