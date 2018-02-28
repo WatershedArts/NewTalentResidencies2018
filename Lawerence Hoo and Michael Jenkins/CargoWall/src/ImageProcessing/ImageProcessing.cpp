@@ -115,6 +115,9 @@ void ImageProcessing::update() {
 				// Threshold the Mat
 				threshold(preProcessedImage, thresholdAmount);
 				
+				// Shrink the Image
+				erode(preProcessedImage,7);
+				
 				// Blur the Mat
 				GaussianBlur(preProcessedImage, 5);
 				
@@ -131,15 +134,17 @@ void ImageProcessing::update() {
 				
 				// Copy the processed mat into a container
 				copy(preProcessedImage,n);
+
+				GaussianBlur(n, 15);
 				
-				// Distance the image
-				distanceTransform(n, p, CV_DIST_C, 3);
-				
-				// Convert to 0 - 1
-				normalize(p, p);
+//				// Distance the image
+//				distanceTransform(n, p, CV_DIST_C, 3);
+//
+//				// Convert to 0 - 1
+//				normalize(p, p);
 				
 				// Copy it back
-				copy(p,preProcessedImage);
+				copy(n,preProcessedImage);
 
 				// Update the Image Container
 				preProcessedImage.update();
