@@ -29,6 +29,7 @@ class ofApp : public ofBaseApp{
 		VisualManager visualManager;
 	
 		ofParameter <bool> showContentPreview { "Show Content Preview", false };
+		ofParameter <bool> disableShader { "Disable Mask", false };
 	
 		ofxAutoReloadedShader shader;
 		ofFbo shaderBuffer;

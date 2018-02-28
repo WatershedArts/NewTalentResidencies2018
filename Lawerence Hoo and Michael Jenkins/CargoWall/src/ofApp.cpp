@@ -1,6 +1,8 @@
 #include "ofApp.h"
 float scaleW = 1.0;
 float scaleH = 1.0;
+
+static int scaleFactor = 4;
 //--------------------------------------------------------------
 void ofApp::setupBuffers() {
 	
@@ -72,148 +74,6 @@ void ofApp::setup() {
 			drawPoints.push_back(p);
 		}
 	}
-	names.push_back("And");
-	names.push_back("you");
-	names.push_back("can");
-	names.push_back("fake");
-	names.push_back("smiles");
-	names.push_back("to");
-	names.push_back("make");
-	names.push_back("you");
-	names.push_back("feel");
-	names.push_back("When");
-	names.push_back("its");
-	names.push_back("time");
-	names.push_back("to");
-	names.push_back("break");
-	names.push_back("the");
-	names.push_back("deal");
-	names.push_back("Cos");
-	names.push_back("it's");
-	names.push_back("easy");
-	names.push_back("now,");
-	names.push_back("i'm");
-	names.push_back("easy");
-	names.push_back("now");
-	names.push_back("And");
-	names.push_back("buy");
-	names.push_back("a");
-	names.push_back("new");
-	names.push_back("disease");
-	names.push_back("When");
-	names.push_back("it");
-	names.push_back("pays");
-	names.push_back("to");
-	names.push_back("sell");
-	names.push_back("the");
-	names.push_back("cure");
-	names.push_back("It's");
-	names.push_back("easy");
-	names.push_back("now,");
-	names.push_back("im");
-	names.push_back("easy");
-	names.push_back("now");
-	names.push_back("Cos");
-	names.push_back("i");
-	names.push_back("can");
-	names.push_back("climb");
-	names.push_back("mountains");
-	names.push_back("I");
-	names.push_back("can");
-	names.push_back("spit");
-	names.push_back("further");
-	names.push_back("than");
-	names.push_back("you");
-	names.push_back("can");
-	names.push_back("hurl");
-	names.push_back("And");
-	names.push_back("i");
-	names.push_back("can");
-	names.push_back("swallow");
-	names.push_back("failure");
-	names.push_back("just");
-	names.push_back("to");
-	names.push_back("learn");
-	names.push_back("And");
-	names.push_back("i");
-	names.push_back("can");
-	names.push_back("build");
-	names.push_back("bridges");
-	names.push_back("from,");
-	names.push_back("what");
-	names.push_back("you");
-	names.push_back("burn");
-	names.push_back("And");
-	names.push_back("you");
-	names.push_back("can");
-	names.push_back("fake");
-	names.push_back("smiles");
-	names.push_back("to");
-	names.push_back("make");
-	names.push_back("you");
-	names.push_back("feel");
-	names.push_back("When");
-	names.push_back("its");
-	names.push_back("time");
-	names.push_back("to");
-	names.push_back("close");
-	names.push_back("the");
-	names.push_back("deal");
-	names.push_back("And");
-	names.push_back("it's");
-	names.push_back("easy");
-	names.push_back("now,");
-	names.push_back("i'm");
-	names.push_back("easy");
-	names.push_back("now");
-	names.push_back("And");
-	names.push_back("buy");
-	names.push_back("a");
-	names.push_back("new");
-	names.push_back("disease");
-	names.push_back("When");
-	names.push_back("it");
-	names.push_back("pays");
-	names.push_back("to");
-	names.push_back("sell");
-	names.push_back("the");
-	names.push_back("cure");
-	names.push_back("It's");
-	names.push_back("easy");
-	names.push_back("now,");
-	names.push_back("i'm");
-	names.push_back("easy");
-	names.push_back("now");
-	names.push_back("Cos");
-	names.push_back("i");
-	names.push_back("can");
-	names.push_back("run,");
-	names.push_back("i");
-	names.push_back("can");
-	names.push_back("hide");
-	names.push_back("I");
-	names.push_back("can");
-	names.push_back("take");
-	names.push_back("a");
-	names.push_back("world");
-	names.push_back("of");
-	names.push_back("pain");
-	names.push_back("in");
-	names.push_back("a");
-	names.push_back("stride");
-	names.push_back("And");
-	names.push_back("i");
-	names.push_back("don't");
-	names.push_back("need");
-	names.push_back("fairy");
-	names.push_back("tales");
-	names.push_back("to");
-	names.push_back("pretend");
-	names.push_back("And");
-	names.push_back("i");
-	names.push_back("don't");
-	names.push_back("need");
-	names.push_back("heroes");
 }
 
 //--------------------------------------------------------------
@@ -224,55 +84,44 @@ void ofApp::update() {
 
 //--------------------------------------------------------------
 void ofApp::draw() {
-	
-	screenInfo.begin();
-	ofClear(0, 0, 0, 255);
 	ofPoint torch = imageProcessor.getBiggestCoordinate();
 	torch *= ofPoint(scaleW,scaleH);
 	
-//
-//	for (int i = 0; i < names.size(); i++) {
-//		if (ofDist(torch.x, torch.y, drawPoints[i].x, drawPoints[i].y) < 20) {
-//			ofSetColor(255, 0, 0, 255);
-//			currentSelection = names[i];
-//		}
-//		else {
-//			ofSetColor(255, 255, 255, 200);
-//		}
-//
-//		font.drawStringCentered(names[i], drawPoints[i].x, drawPoints[i].y);
-//	}
-	
-	visualManager.draw();
+	screenInfo.begin();
+		ofClear(0, 0, 0, 255);
+		visualManager.draw();
 	screenInfo.end();
 	
 	// Background to Black
 	ofBackground(0);
 
-	// Open the Buffer
-	shaderBuffer.begin();
-	
-	// Clear it to Black
-	ofClear(0, 0, 0, 255);
-	
-	// Open the Shader
-	shader.begin();
-	
-	// Set the time and resolution variables
-	shader.setUniform1f("u_time", ofGetElapsedTimef());
-	shader.setUniform2f("u_resolution", ofVec2f(ofGetWidth(),ofGetHeight()));
-	
-	// This is where we pass through the masking texture
-	shader.setUniformTexture("maskTex", imageProcessor.getMaskImage(), 1);
-	
+	if(!disableShader) {
+		// Open the Buffer
+		shaderBuffer.begin();
+		
+		// Clear it to Black
+		ofClear(0, 0, 0, 255);
+		
+		// Open the Shader
+		shader.begin();
+		
+		// Set the time and resolution variables
+		shader.setUniform1f("u_time", ofGetElapsedTimef());
+		shader.setUniform2f("u_resolution", ofVec2f(ofGetWidth(),ofGetHeight()));
+		
+		// This is where we pass through the masking texture
+		shader.setUniformTexture("maskTex", imageProcessor.getMaskImage(), 1);
+	}
 	screenInfo.draw(0,0);
 
-	// Close both the buffer and shader
-	shader.end();
-	shaderBuffer.end();
+	if(!disableShader) {
+		// Close both the buffer and shader
+		shader.end();
+		shaderBuffer.end();
 
-	// Draw the Shaded Buffer
-	shaderBuffer.draw(0,0);
+		// Draw the Shaded Buffer
+		shaderBuffer.draw(0,0);
+	}
 	
 	ofSetColor(ofColor::red,50);
 	ofDrawCircle(torch.x, torch.y, 10);
@@ -282,8 +131,9 @@ void ofApp::draw() {
 	// Draw Stuff
 	imageProcessor.draw();
 	
+	
 	if(showContentPreview)
-		screenInfo.draw(ofGetWidth() - ofGetWidth()/6,ofGetHeight() - ofGetHeight()/6,ofGetWidth()/6,ofGetHeight()/6);
+		screenInfo.draw(ofGetWidth() - ofGetWidth()/scaleFactor,ofGetHeight() - ofGetHeight()/scaleFactor,ofGetWidth()/scaleFactor,ofGetHeight()/scaleFactor);
 	
 	drawGui();
 }
@@ -309,8 +159,8 @@ void ofApp::drawGui() {
 	if (ofxImGui::BeginWindow("Settings", mainSettings, false))
 	{
 		ofxImGui::AddParameter(showContentPreview);
-		static const vector<string> labels = { "Video", "Text", "Animation","Shaders" };
-		ofxImGui::AddRadio(this->visualManager.currentMode, labels, 4);
+		ofxImGui::AddParameter(disableShader);
+		
 		
 		if(ofxImGui::BeginTree(this->imageProcessor.imageProc, mainSettings)) {
 			
@@ -335,6 +185,23 @@ void ofApp::drawGui() {
 			ofxImGui::AddParameter(this->imageProcessor.cameraFramerate);
 			ofxImGui::AddParameter(this->imageProcessor.cameraVFlip);
 			ofxImGui::AddParameter(this->imageProcessor.cameraHFlip);
+			ofxImGui::EndTree(mainSettings);
+		}
+		
+		ofParameterGroup d {"Visual Manager",this->visualManager.currentMode};
+		if(ofxImGui::BeginTree(d, mainSettings)) {
+			
+			static const vector<string> labels = { "Video", "Text", "Animation","Shaders" };
+			ofxImGui::AddRadio(this->visualManager.currentMode, labels, 4);
+		
+			ImGui::Separator();
+			if( ImGui::Button("Previous Poem") ) {
+				visualManager.poemHandler.previousPoem();
+			}
+			
+			if( ImGui::Button("Next Poem") ) {
+				visualManager.poemHandler.nextPoem();
+			}
 			ofxImGui::EndTree(mainSettings);
 		}
 	}
