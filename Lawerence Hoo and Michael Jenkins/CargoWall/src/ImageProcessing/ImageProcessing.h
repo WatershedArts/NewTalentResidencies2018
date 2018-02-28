@@ -103,7 +103,7 @@ class ImageProcessing {
 		ofParameter<bool> bShowCvCalibration{"Show CV Calibration", false};
 		ofParameter<int> cvImagesOpacity{"CV Images Opacity", 64, 1,255};
 		ofParameter<bool> bFillArea{"Fill Blob Area", false};
-		ofParameter<int> fadeLevel{"Fade Level", 1, 1,255};
+		ofParameter<int> fadeLevel{"Fade Level", 50, 1,255};
 		ofParameter<int> brushScale{"Brush Scale",5,25,100};
 		ofParameter<int> thresholdAmount{"Image Threshold",230,0,255};
 		ofParameter<int> maxArea{"Max Tracking Size", 150,1,500};
@@ -120,7 +120,6 @@ class ImageProcessing {
 		ofParameter<bool> cameraVFlip{"Flip V", false};
 		ofParameter<bool> cameraHFlip{"Flip H", false};
 		ofParameterGroup cameraSettings{"Camera Settings",cameraBrightness,cameraExposure,cameraGain,cameraContrast,cameraFramerate,cameraVFlip,cameraHFlip};
-	
 	
 		void onBrightness(int &val);
 		void onContrast(int &val);

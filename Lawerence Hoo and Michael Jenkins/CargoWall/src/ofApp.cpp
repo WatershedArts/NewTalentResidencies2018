@@ -26,19 +26,6 @@ void ofApp::setupBuffers() {
 	
 	// Enable the Alpha Channel
 	ofEnableAlphaBlending();
-	
-	// Load Some Developement Images
-	img.load("B.jpg");
-	image.load("test.jpg");
-	
-	// Load a Dev Video
-	defaultVideo.load("Shadowing.mp4");
-	defaultVideo.play();
-	
-	if(font.load("verdana.ttf",15) ) {
-		cout << "Font Loaded"  << endl;
-	}
-	
 }
 
 //--------------------------------------------------------------
@@ -50,42 +37,24 @@ void ofApp::setup() {
 	setupBuffers();
 	
 	isOpen = true;
-	currentSelection = "";
 	
 	visualManager.setup();
 	
 	
-	int spacingWidth = ofGetWidth() / 12;
-	int spacingHeight = ofGetHeight() / 12;
-	
-	scaleW = ofGetWidth() / 640;
-	scaleH = ofGetHeight() / 480;
-	
-	for(int y = 0; y < 12; y++)
-	{
-		for(int x = 0; x < 12; x++)
-		{
-			int offset = 10;
-			if (y % 2) {
-				offset = 60;
-			}
-			
-			ofPoint p = ofPoint(offset+(x*spacingWidth),10+(y*spacingHeight));
-			drawPoints.push_back(p);
-		}
-	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update() {
-	defaultVideo.update();
 	imageProcessor.update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw() {
+	scaleW = ofGetWidth() / 640;
+	scaleH = ofGetHeight() / 480;
+	
 	ofPoint torch = imageProcessor.getBiggestCoordinate();
-	torch *= ofPoint(scaleW,scaleH);
+	visualManager.update(ofMap(torch.x,0,640,0,ofGetWidth()), ofMap(torch.y,0,480,0,ofGetHeight()));
 	
 	screenInfo.begin();
 		ofClear(0, 0, 0, 255);
@@ -123,14 +92,13 @@ void ofApp::draw() {
 		shaderBuffer.draw(0,0);
 	}
 	
-	ofSetColor(ofColor::red,50);
-	ofDrawCircle(torch.x, torch.y, 10);
+	ofSetColor(ofColor::red,250);
+	ofDrawCircle(ofMap(torch.x,0,640,0,ofGetWidth()), ofMap(torch.y,0,480,0,ofGetHeight()), 10);
 	
 	ofSetColor(ofColor::white);
 	
 	// Draw Stuff
 	imageProcessor.draw();
-	
 	
 	if(showContentPreview)
 		screenInfo.draw(ofGetWidth() - ofGetWidth()/scaleFactor,ofGetHeight() - ofGetHeight()/scaleFactor,ofGetWidth()/scaleFactor,ofGetHeight()/scaleFactor);
@@ -140,20 +108,16 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	
-	switch (key) {
-//		case 'd': imageProcessor.setMode(DEBUG_PROCESSING); break;
-//		case 'v': imageProcessor.setMode(VIDEO_PROCESSING); break;
-//		case 's': imageSelection.saveToFile("w.xml"); break;
-		default:break;
-	}
+
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui() {
+	
 	auto mainSettings = ofxImGui::Settings();
 	mainSettings.windowPos = ofVec2f(ofGetWidth()-400,10);
 	mainSettings.windowSize = ofVec2f(400,10);
+	
 	gui.begin();
 	
 	if (ofxImGui::BeginWindow("Settings", mainSettings, false))
@@ -161,12 +125,11 @@ void ofApp::drawGui() {
 		ofxImGui::AddParameter(showContentPreview);
 		ofxImGui::AddParameter(disableShader);
 		
-		
 		if(ofxImGui::BeginTree(this->imageProcessor.imageProc, mainSettings)) {
-			
 			ofxImGui::AddParameter(this->imageProcessor.bShowCv);
 			ofxImGui::AddParameter(this->imageProcessor.bShowCvCalibration);
 			ofxImGui::AddParameter(this->imageProcessor.bFillArea);
+			ImGui::Separator();
 			ofxImGui::AddParameter(this->imageProcessor.cvImagesOpacity);
 			ofxImGui::AddParameter(this->imageProcessor.fadeLevel);
 			ofxImGui::AddParameter(this->imageProcessor.brushScale);
@@ -191,20 +154,32 @@ void ofApp::drawGui() {
 		ofParameterGroup d {"Visual Manager",this->visualManager.currentMode};
 		if(ofxImGui::BeginTree(d, mainSettings)) {
 			
-			static const vector<string> labels = { "Video", "Text", "Animation","Shaders" };
-			ofxImGui::AddRadio(this->visualManager.currentMode, labels, 4);
+			static const vector<string> labels = { "Video", "Poems", "Photos","Animated Poems" };
+			ofxImGui::AddRadio(this->visualManager.currentMode, labels, 1);
 		
 			ImGui::Separator();
 			if( ImGui::Button("Previous Poem") ) {
 				visualManager.poemHandler.previousPoem();
+				visualManager.animatedPoemHandler.previousPoem();
 			}
 			
 			if( ImGui::Button("Next Poem") ) {
 				visualManager.poemHandler.nextPoem();
+				visualManager.animatedPoemHandler.nextPoem();
 			}
+			
+			if( ImGui::Button("Previous Line") ) {
+				visualManager.animatedPoemHandler.previousLine();
+			}
+			
+			if( ImGui::Button("Next Line") ) {
+				visualManager.animatedPoemHandler.nextLine();
+			}
+			
 			ofxImGui::EndTree(mainSettings);
 		}
 	}
 	ofxImGui::EndWindow(mainSettings);
 	gui.end();
+	ofDrawBitmapStringHighlight("Current FPS: " + ofToString(ofGetFrameRate()), 10,ofGetHeight()-25);
 }

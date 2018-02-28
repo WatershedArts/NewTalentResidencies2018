@@ -22,9 +22,15 @@ struct Poem {
 	vector <string> lines;
 };
 
+
+
 class Poems {
 	public:
+
 		void loadPoems(string dirPath) {
+		
+			flags |= ofxTextAlign::HORIZONTAL_ALIGN_CENTER;
+			flags |= ofxTextAlign::VERTICAL_ALIGN_MIDDLE;
 			font = new ofxTextAlignTTF();
 			font->load(OF_TTF_SANS,25);
 			ofDirectory dir(dirPath);
@@ -62,10 +68,7 @@ class Poems {
 		}
 	
 		void draw() {
-			unsigned int flags = 0;
 			
-			flags |= ofxTextAlign::HORIZONTAL_ALIGN_CENTER;
-			flags |= ofxTextAlign::VERTICAL_ALIGN_MIDDLE;
 			if(!_poems.empty()) {
 				int startingPoint = ofGetHeight()/2 - (_poems[currentPoem].lines.size() * 25) / 2 ;
 				for(int i = 0; i < _poems[currentPoem].lines.size(); i++) {
@@ -73,14 +76,24 @@ class Poems {
 				}
 			}
 		}
-
-	private:
 	
-	protected:
+	
+		/**
+			<#Description#>
+
+			@return <#return value description#>
+		*/
+		vector <Poem> getPoems() {
+			return _poems;
+		}
+	
 		ofxTextAlignTTF *font;
 	
-	vector <Poem> _poems;
-	int currentPoem = 0;
+	protected:
+	
+		vector <Poem> _poems;
+		int currentPoem = 0;
+		unsigned int flags = 0;
 };
 
 #endif /* Poems_h */

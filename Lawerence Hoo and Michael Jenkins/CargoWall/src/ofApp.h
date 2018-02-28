@@ -11,20 +11,13 @@
 class ofApp : public ofBaseApp{
 
 	public:
+		void setupBuffers();
 		void setup();
 		void update();
 		void draw();
-
-		void setupBuffers();
-	
-		void keyPressed(int key);
-	
 		void drawGui();
-	
-		vector <ofPoint> drawPoints;
-	
-		void drawNames();
-	
+		void keyPressed(int key);
+
 		ImageProcessing imageProcessor;
 		VisualManager visualManager;
 	
@@ -34,17 +27,8 @@ class ofApp : public ofBaseApp{
 		ofxAutoReloadedShader shader;
 		ofFbo shaderBuffer;
 		ofFbo screenInfo;
-	
+
 		ofxImGui::Gui gui;
 	
-		ofImage image;
-		ofImage img;
-		ofVideoPlayer defaultVideo;
-	
-		ofxCenteredTrueTypeFont font;
 		bool isOpen;
-	
-		string currentSelection;
-	
-		vector<string> names;
 };

@@ -215,6 +215,7 @@
 		60544ADFBC07C7BE88091A59 /* registration.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = registration.c; path = ../../../../of_v0.9.8_osx_release/addons/ofxKinect/libs/libfreenect/src/registration.c; sourceTree = SOURCE_ROOT; };
 		612E9D0AD9CFF11E7F589F91 /* USBManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = USBManager.h; path = ../../../../of_v0.9.8_osx_release/addons/ofxPS3EyeGrabber/libs/ps3eye/src/USBManager.h; sourceTree = SOURCE_ROOT; };
 		6320D5EBFA2FAFADEB7C69A0 /* stb_rect_pack.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stb_rect_pack.h; path = ../../../../of_v0.9.8_osx_release/addons/ofxImGui/libs/imgui/src/stb_rect_pack.h; sourceTree = SOURCE_ROOT; };
+		63B5D4FC2046F65B003DABA5 /* AnimatedPoems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimatedPoems.h; sourceTree = "<group>"; };
 		63B87AB32046C16400EF37EE /* Photos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Photos.h; sourceTree = "<group>"; };
 		641CE009BA39F99A57EC2A11 /* keep_alive.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = keep_alive.c; path = ../../../../of_v0.9.8_osx_release/addons/ofxKinect/libs/libfreenect/src/keep_alive.c; sourceTree = SOURCE_ROOT; };
 		656DB2ED831AA79E8B75D2F5 /* reduce.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = reduce.hpp; path = ../../../../of_v0.9.8_osx_release/addons/ofxOpenCv/libs/opencv/include/opencv2/gpu/device/reduce.hpp; sourceTree = SOURCE_ROOT; };
@@ -617,10 +618,10 @@
 		3598D2F1AA64572DE1ECF19C /* ImageProcessing */ = {
 			isa = PBXGroup;
 			children = (
-				5249C38D0FD3F1746459B5A2 /* ImageSelection.h */,
 				CDF50EF0EAB28AED3E89116D /* ImageProcessing.cpp */,
-				473A85589D75B2BAD3A6D95E /* ImageSelection.cpp */,
 				6E2C07C972841EE8A2703FF7 /* ImageProcessing.h */,
+				473A85589D75B2BAD3A6D95E /* ImageSelection.cpp */,
+				5249C38D0FD3F1746459B5A2 /* ImageSelection.h */,
 			);
 			name = ImageProcessing;
 			sourceTree = "<group>";
@@ -915,8 +916,8 @@
 			isa = PBXGroup;
 			children = (
 				DB8C297DEECC1382FFF5541A /* Timer.cpp */,
-				04CB4B359CFCA0E7F46824D4 /* ofxCenteredTrueTypeFont.h */,
 				E6365A2835EB4EF7C99151DC /* Timer.h */,
+				04CB4B359CFCA0E7F46824D4 /* ofxCenteredTrueTypeFont.h */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -1096,6 +1097,7 @@
 				B59737E9A029444DEF4DAC6E /* VisualManager.h */,
 				63B87AB32046C16400EF37EE /* Photos.h */,
 				67117E5947D944D69171CB4E /* Poems.h */,
+				63B5D4FC2046F65B003DABA5 /* AnimatedPoems.h */,
 				E42F945AD116D9F82F3D7931 /* Videos.h */,
 			);
 			name = Visuals;

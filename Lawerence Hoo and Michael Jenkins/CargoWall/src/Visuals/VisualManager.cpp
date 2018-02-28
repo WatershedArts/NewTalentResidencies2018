@@ -7,17 +7,25 @@
 
 #include "VisualManager.h"
 
+bool isLocked = false;
 //--------------------------------------------------------------
 void VisualManager::setup() {
 //	currentMode = VIDEOS;
 	videoHandler.loadDirectory("Visuals/videos");
 	poemHandler.loadPoems("Visuals/poems");
 	photoHandler.loadPhotos("Visuals/photos");
+	animatedPoemHandler.getPoems(poemHandler.getPoems(), poemHandler.font);
 }
 
 //--------------------------------------------------------------
-void VisualManager::update() {
-	
+void VisualManager::update(float x, float y) {
+	if(ofDist(ofGetWidth()/2, ofGetHeight()/2, x, y) < 40 && !isLocked) {
+		animatedPoemHandler.nextLine();
+		isLocked = true;
+	}
+	else if(ofDist(ofGetWidth()/2, ofGetHeight()/2, x, y) > 40 && isLocked ) {
+		isLocked = false;
+	}
 }
 
 //--------------------------------------------------------------
@@ -31,6 +39,9 @@ void VisualManager::draw() {
 			break;
 		case 2:
 			photoHandler.draw();
+			break;
+		case 3:
+			animatedPoemHandler.draw();
 			break;
 		default:
 			break;

@@ -11,21 +11,22 @@
 #include <stdio.h>
 #include "Videos.h"
 #include "Poems.h"
+#include "AnimatedPoems.h"
 #include "Photos.h"
 #include "ofxImGui.h"
 
 enum class VisualMode {
 	VIDEOS,
-	TEXT,
-	POEM_ANIMATIONS,
-	SHADERS
+	POEMS,
+	PHOTOS,
+	ANIMATED_POEMS
 };
 
 class VisualManager {
 	public:
 	
 		void setup();
-		void update();
+		void update(float x, float y);
 		void draw();
 	
 //		VisualMode currentMode;
@@ -33,6 +34,7 @@ class VisualManager {
 		Videos videoHandler;
 		Poems poemHandler;
 		Photos photoHandler;
+		AnimatedPoems animatedPoemHandler;
 	
 		ofParameter<int> currentMode { "Visual Mode", static_cast<int>(VisualMode::VIDEOS) };
 	
