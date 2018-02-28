@@ -96,12 +96,11 @@ class ImageProcessing {
 			@return parameters
 		*/
 		//--------------------------------------------------------------
-	
-	
 		ofParameterGroup getParameters();
 	
+	
 		ofParameter<bool> bShowCv{"Show CV", false};
-		ofParameter<bool> bShowCvCalibration{"Show CV Calibratoin", false};
+		ofParameter<bool> bShowCvCalibration{"Show CV Calibration", false};
 		ofParameter<int> cvImagesOpacity{"CV Images Opacity", 64, 1,255};
 		ofParameter<bool> bFillArea{"Fill Blob Area", false};
 		ofParameter<int> fadeLevel{"Fade Level", 1, 1,255};
@@ -110,7 +109,6 @@ class ImageProcessing {
 		ofParameter<int> maxArea{"Max Tracking Size", 150,1,500};
 		ofParameter<int> minArea{"Min Tracking Size", 30,1,500};
 		ofParameter<int> contourThreshold{"Contour Threshold",100,1,255};
-	
 	
 		ofParameterGroup imageProc{ "Image Processing",bShowCv,bShowCvCalibration,cvImagesOpacity,bFillArea,fadeLevel,brushScale,thresholdAmount,maxArea,minArea,contourThreshold };
 	
