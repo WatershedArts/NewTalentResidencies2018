@@ -215,8 +215,8 @@
 		60544ADFBC07C7BE88091A59 /* registration.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = registration.c; path = ../../../../of_v0.9.8_osx_release/addons/ofxKinect/libs/libfreenect/src/registration.c; sourceTree = SOURCE_ROOT; };
 		612E9D0AD9CFF11E7F589F91 /* USBManager.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = USBManager.h; path = ../../../../of_v0.9.8_osx_release/addons/ofxPS3EyeGrabber/libs/ps3eye/src/USBManager.h; sourceTree = SOURCE_ROOT; };
 		6320D5EBFA2FAFADEB7C69A0 /* stb_rect_pack.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stb_rect_pack.h; path = ../../../../of_v0.9.8_osx_release/addons/ofxImGui/libs/imgui/src/stb_rect_pack.h; sourceTree = SOURCE_ROOT; };
-		63B5D4FC2046F65B003DABA5 /* AnimatedPoems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnimatedPoems.h; sourceTree = "<group>"; };
-		63B87AB32046C16400EF37EE /* Photos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Photos.h; sourceTree = "<group>"; };
+		63B5D4FD20475E25003DABA5 /* AnimatedPoems.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AnimatedPoems.h; path = Visuals/AnimatedPoems.h; sourceTree = "<group>"; };
+		63B5D4FE20475E31003DABA5 /* Photos.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Photos.h; path = Visuals/Photos.h; sourceTree = "<group>"; };
 		641CE009BA39F99A57EC2A11 /* keep_alive.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = keep_alive.c; path = ../../../../of_v0.9.8_osx_release/addons/ofxKinect/libs/libfreenect/src/keep_alive.c; sourceTree = SOURCE_ROOT; };
 		656DB2ED831AA79E8B75D2F5 /* reduce.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = reduce.hpp; path = ../../../../of_v0.9.8_osx_release/addons/ofxOpenCv/libs/opencv/include/opencv2/gpu/device/reduce.hpp; sourceTree = SOURCE_ROOT; };
 		662009E46C5FBFB479CF0CD5 /* fdog.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = fdog.h; path = ../../../../of_v0.9.8_osx_release/addons/ofxCv/libs/CLD/include/CLD/fdog.h; sourceTree = SOURCE_ROOT; };
@@ -1095,9 +1095,9 @@
 			children = (
 				0907C862EB2A63749FE5A3AB /* VisualManager.cpp */,
 				B59737E9A029444DEF4DAC6E /* VisualManager.h */,
-				63B87AB32046C16400EF37EE /* Photos.h */,
+				63B5D4FD20475E25003DABA5 /* AnimatedPoems.h */,
+				63B5D4FE20475E31003DABA5 /* Photos.h */,
 				67117E5947D944D69171CB4E /* Poems.h */,
-				63B5D4FC2046F65B003DABA5 /* AnimatedPoems.h */,
 				E42F945AD116D9F82F3D7931 /* Videos.h */,
 			);
 			name = Visuals;

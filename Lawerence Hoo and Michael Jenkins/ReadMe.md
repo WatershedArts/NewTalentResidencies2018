@@ -24,11 +24,48 @@ This site does a better job of explaining the process than I can manage.
 
 ### Setup
 
-Image
+There are only a few setup steps needed for the application run, these are mainly calibration steps.
+
+With the application open. 
+
+Open the GUI by pressing TAB.
+
+Click Show Folder to expose the content directory.
+
+- Any Poems that need to be show should be placed in the Visual/poems folder.
+- Any Video should be placed in the Visual/videos folder.
+- Any Photos should be placed in the Visual/photos folder.
+
+Click Reload. This will add the content to the application.
+
+See the next section for image calibration.
 
 ### Region of Interest
+
+We need to constrain/rework the camera coordinates to be the same as the projector coordinates. In the Gui Click Show CV Calibration.
+
+It will open a subsection of the application, using the mouse drag the corners of the rectangle so that they roughely align with the corners of the projected image. Remember the camera won't be able to see the projected image. Once done Click Save. Next time the application opens the calibration will be automatically loaded.
+
+### Addons Required
+
+- [ofxAutoReloadedShader](http://github.com/andreasmuller/ofxAutoReloadedShader)
+- [ofxCv](http://github.com/kylemcdonald/ofxCv)
+- [ofxImGui](http://github.com/jvcleave/ofxImGui)
+- [ofxJSON](http://github.com/jeffcrouse/ofxJSON)
+- [ofxKinect]()
+- [ofxOpenCv]()
+- [ofxPS3EyeGrabber](http://github.com/bakercp/ofxPS3EyeGrabber)
+- [ofxTextAlign](http://github.com/nariakiiwatani/ofxTextAlign)
+- [ofxTween](http://github.com/arturoc/ofxTween)
+- [ofxXmlSettings]()
 
 ### Files
 
 File | Purpose
 --- | ---
+main.cpp |ofApp.cpp |ofApp.h |
+AnimatedPoems.h |Photos.h |Poems.h |Videos.h |VisualManager.cpp |VisualManager.h |
+ofxCenteredTrueTypeFont.h |Timer.cpp | Timer.h |
+ImageProcessing.cpp |ImageProcessing.h |ImageSelection.cpp |ImageSelection.h |
+
+### ToDo
