@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using DigitalRuby.Tween;
+
 //----------------------------------------------------
 // Touch Dial Object
 //----------------------------------------------------
@@ -33,6 +35,9 @@ public class TouchManager : MonoBehaviour {
 	public Transform[] fingers;
 	public TouchDial dial;
     bool isPlaying = false;
+
+
+
     //----------------------------------------------------
     // Update Loop
     //----------------------------------------------------
@@ -62,7 +67,6 @@ public class TouchManager : MonoBehaviour {
 
 #endif
 
-
         if (Input.touchCount == 3)
         {
             calculateDial(Input.touches);
@@ -71,6 +75,39 @@ public class TouchManager : MonoBehaviour {
                 fingers[i].transform.position = new Vector3(Input.touches[i].position.x, Input.touches[i].position.y, 0.0f);
             }
         }
+    }
+
+    //----------------------------------------------------
+    // Hide the Tuner
+    //----------------------------------------------------
+    public void hideTuner(){
+
+        RectTransform r = tunerSlider.GetComponent<RectTransform>();
+        float currentPos = r.transform.position.y;
+        float endPos = r.transform.position.y + 78f;
+
+        TweenFactory.Tween("Hide Tuner", currentPos,endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut,(t) => {
+            Vector3 e = new Vector3(r.transform.position.x, t.CurrentValue);
+            tunerSlider.transform.SetPositionAndRotation(e, Quaternion.identity);
+        },(t) => {
+            print("Done Hide");
+        });
+    }
+
+    //----------------------------------------------------
+    // Show the Tuner
+    //----------------------------------------------------
+    public void showTuner() {
+        RectTransform r = tunerSlider.GetComponent<RectTransform>();
+        float currentPos = r.transform.position.y;
+        float endPos = r.transform.position.y - 78f;
+
+        TweenFactory.Tween("Show Tuner", currentPos, endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut, (t) => {
+            Vector3 e = new Vector3(r.transform.position.x, t.CurrentValue);
+            tunerSlider.transform.SetPositionAndRotation(e, Quaternion.identity);
+        }, (t) => {
+            print("Done Show");
+        });
     }
 
 	//----------------------------------------------------
@@ -87,7 +124,7 @@ public class TouchManager : MonoBehaviour {
 		dial.apex = topIndex;
 
         float d = dial.orientation.Map(0f, 360f, 88.0f, 108.0f);
-        angle.SetText("Orig Rot: {0} Mapped Rot: {1.0}", dial.orientation,d);
+        angle.SetText("Orig Rot: {0} Mapped Rot: {1:1}", dial.orientation,d);
         tunerSlider.value = d;
 
 

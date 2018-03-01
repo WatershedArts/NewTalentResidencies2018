@@ -37,7 +37,6 @@ public static class ExtensionMethods {
 	public static float toDegrees(this float value) {
 		return value * 180.0f / Mathf.PI;
 	}
-
 }
 
 //----------------------------------------------------
@@ -58,7 +57,7 @@ public class BeaconData {
 	public double lat;
 	public double lng;
 	public double radius;
-	public int tuning;
+	public float tuning;
 	public int genericid; 
 };
 
@@ -110,11 +109,11 @@ public class Beacon : MonoBehaviour {
 
 		// Check that the user has entered
 		if(!hasUserEntered && (result < radiusKilometres)) {
-			BeaconManager.Instance.gameObject.SendMessage("OnEnteredBeacon",data.beaconid,SendMessageOptions.DontRequireReceiver);
+			BeaconManager.Instance.gameObject.SendMessage("OnEnteredBeacon",data,SendMessageOptions.DontRequireReceiver);
 			hasUserEntered = true;
 		}
 		else if (hasUserEntered && (result > radiusKilometres)) {
-			BeaconManager.Instance.gameObject.SendMessage("OnExitBeacon",data.beaconid,SendMessageOptions.DontRequireReceiver);
+			BeaconManager.Instance.gameObject.SendMessage("OnExitBeacon",data,SendMessageOptions.DontRequireReceiver);
 			hasUserEntered = false;
 		}
 	}

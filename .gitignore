@@ -64,6 +64,7 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
+Tween/
 Mapbox/
 ShaderForge/
 Lawerence Hoo and Michael Jenkins/CargoWall/bin/data/videos/BubbleDev.mov

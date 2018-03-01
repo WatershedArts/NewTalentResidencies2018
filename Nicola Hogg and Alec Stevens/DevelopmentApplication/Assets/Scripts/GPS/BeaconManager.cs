@@ -66,16 +66,19 @@ public class BeaconManager : MonoBehaviour {
 	//----------------------------------------------------
 	// Has the User Entered the Beacon
 	//----------------------------------------------------
-	void OnEnteredBeacon(string t) {
-		print("Heya " + t);
-		FindObjectOfType<AudioManager>().Play(t);
+    void OnEnteredBeacon(BeaconData t) {
+        print("Heya " + t.beaconid);
+        //FindObjectOfType<TouchManager>().showTuner(t);
+        //FindObjectOfType<AudioManager>().Play(t.beaconid);
 	}
 
 	//----------------------------------------------------
 	// Has the User Exited the Beacon
 	//----------------------------------------------------
-	void OnExitBeacon(string t) {
-		print("See Ya " + t);
-		FindObjectOfType<AudioManager>().Stop(t);
+    void OnExitBeacon(BeaconData t) {
+        print("See Ya " + t.beaconid);
+
+        FindObjectOfType<TouchManager>().hideTuner();
+        //FindObjectOfType<AudioManager>().Stop(t.beaconid);
 	}
 }
