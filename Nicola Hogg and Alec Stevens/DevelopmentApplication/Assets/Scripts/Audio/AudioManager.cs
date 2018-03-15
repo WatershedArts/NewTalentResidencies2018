@@ -56,4 +56,19 @@ public class AudioManager : MonoBehaviour {
 		}
 		s.source.Stop();
 	}
+
+    public bool isTrackPlaying(string name) {
+
+        Sound s = System.Array.Find(sounds,sound => sound.name == name);
+        if( s == null ) {
+            Debug.LogWarning("Cannot Find Audio File " + name);
+            return false;
+        }
+
+        if( !s.source.isPlaying ) {
+            return false;   
+        }
+
+        return true;
+    }
 }
