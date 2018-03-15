@@ -59,6 +59,7 @@ public class BeaconData {
 	public double radius;
 	public float tuning;
 	public int genericid; 
+    public bool isPlaying = false;
 };
 
 //----------------------------------------------------
@@ -73,7 +74,7 @@ public class Beacon : MonoBehaviour {
 
 	// Beacon Latches
 	private bool hasUserEntered = false;
-	private bool isPlaying = false;
+	public bool isPlaying = false;
 
 	//---------------------------------------------------------------
 	// Init Beacon
