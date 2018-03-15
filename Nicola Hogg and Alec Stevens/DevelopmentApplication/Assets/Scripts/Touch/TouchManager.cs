@@ -46,9 +46,12 @@ public class TouchManager : MonoBehaviour {
 	public Slider tunerSlider;
 	public Transform[] fingers;
 	public TouchDial dial;
+    [Range(0f, 2f)]
+    public float tuningThreshold = 0.2f;
     bool isPlaying = false;
 
 
+            if ((d > (b.data.tuning - tuningThreshold) && d < (b.data.tuning + tuningThreshold) )) {
 
     //----------------------------------------------------
     // Update Loop
