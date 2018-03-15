@@ -22,13 +22,11 @@ struct Poem {
 	vector <string> lines;
 };
 
-
-
 class Poems {
 	public:
 
 		void loadPoems(string dirPath) {
-		
+			_poems.clear();
 			flags |= ofxTextAlign::HORIZONTAL_ALIGN_CENTER;
 			flags |= ofxTextAlign::VERTICAL_ALIGN_MIDDLE;
 			font = new ofxTextAlignTTF();
@@ -78,11 +76,6 @@ class Poems {
 		}
 	
 	
-		/**
-			<#Description#>
-
-			@return <#return value description#>
-		*/
 		vector <Poem> getPoems() {
 			return _poems;
 		}

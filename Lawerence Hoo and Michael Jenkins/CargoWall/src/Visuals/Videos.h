@@ -15,18 +15,6 @@ class Cargo_VideoPlayer: public ofVideoPlayer {
 	
 		Cargo_VideoPlayer() {
 			isDone = false;
-//			ofAddListener(ofEvents().update,this,&Cargo_VideoPlayer::checkVideoHasFinished);
-		}
-	
-		void checkVideoHasFinished() {//ofEventArgs &event) {
-//			cout << "Video Updating" << endl;
-			if( this->isInitialized() ) {
-				if( !isDone && this->getIsMovieDone() ) {
-					string s = "s";
-					ofNotifyEvent(videoFinished,s,this);
-					isDone = true;
-				}
-			}
 		}
 	
 		bool isVideoDone() {
@@ -48,15 +36,14 @@ class Videos {
 	
 		void draw() {
 			if (!videoFiles.empty()) {
-				
 				videoFiles[currentVideoIndex].update();
-				videoFiles[currentVideoIndex].checkVideoHasFinished();
 				videoFiles[currentVideoIndex].draw(0,0,ofGetWidth(),ofGetHeight());
 			}
 		}
 	
 		void loadDirectory(string dirPath) {
 			
+			videoFiles.clear();
 			ofDirectory dir(dirPath);
 			dir.sort();
 			
@@ -79,6 +66,19 @@ class Videos {
 			return videoFilesNames;
 		}
 	
+		void nextVideo() {
+			if(currentVideoIndex != videoFiles.size()-1) {
+				currentVideoIndex++;
+				videoFiles[currentVideoIndex].play();
+			}
+		}
+	
+		void previousVideo() {
+			if(currentVideoIndex != 0) {
+				currentVideoIndex--;
+				videoFiles[currentVideoIndex].play();
+			}
+		}
 	
 		int currentVideoIndex;
 		vector <Cargo_VideoPlayer> videoFiles;

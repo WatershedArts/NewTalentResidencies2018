@@ -7,6 +7,8 @@
 #include "ImageProcessing.h"
 #include "ofxCenteredTrueTypeFont.h"
 #include "VisualManager.h"
+#include "ofxTextAlignTTF.h"
+
 
 class ofApp : public ofBaseApp{
 
@@ -29,6 +31,8 @@ class ofApp : public ofBaseApp{
 		ofFbo screenInfo;
 
 		ofxImGui::Gui gui;
+		ofxTextAlignTTF *text;
 	
 		bool isOpen;
+		bool bDrawGui;
 };

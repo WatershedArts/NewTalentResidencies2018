@@ -6,4 +6,5 @@ ofxKinect
 ofxOpenCv
 ofxPS3EyeGrabber
 ofxTextAlign
+ofxTween
 ofxXmlSettings

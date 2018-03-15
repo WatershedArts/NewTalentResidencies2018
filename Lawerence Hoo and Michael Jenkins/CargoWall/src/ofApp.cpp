@@ -6,6 +6,13 @@ static int scaleFactor = 4;
 //--------------------------------------------------------------
 void ofApp::setupBuffers() {
 	
+	// Setup the universal font file
+	unsigned int flags;
+	flags |= ofxTextAlign::HORIZONTAL_ALIGN_CENTER;
+	flags |= ofxTextAlign::VERTICAL_ALIGN_MIDDLE;
+	text = new ofxTextAlignTTF();
+	text->load(OF_TTF_SANS,15);
+	
 	// Load the Cargo Shader which is essentially a Alpha Masking Shader
 	shader.load("Shaders/cargoshader");
 	
@@ -15,13 +22,13 @@ void ofApp::setupBuffers() {
 	// Allocate the Screen Space Buffer
 	shaderBuffer.allocate(ofGetWidth(), ofGetHeight());
 	shaderBuffer.begin();
-	ofClear(0, 0, 0, 255);
+		ofClear(0, 0, 0, 255);
 	shaderBuffer.end();
 	
 	// Allocate the Screen Space Buffer
 	screenInfo.allocate(ofGetWidth(), ofGetHeight());
 	screenInfo.begin();
-	ofClear(0, 0, 0, 255);
+		ofClear(0, 0, 0, 255);
 	screenInfo.end();
 	
 	// Enable the Alpha Channel
@@ -30,17 +37,16 @@ void ofApp::setupBuffers() {
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
+	bDrawGui = true;
+	ofSetDataPathRoot("../Resources/data/");
 	ofSetVerticalSync(true);
 	ofSetFrameRate(60);
+	
 	// Do the Above Setup
 	setupBuffers();
 	
 	isOpen = true;
-	
 	visualManager.setup();
-	
-	
 }
 
 //--------------------------------------------------------------
@@ -92,23 +98,30 @@ void ofApp::draw() {
 		shaderBuffer.draw(0,0);
 	}
 	
-	ofSetColor(ofColor::red,250);
-	ofDrawCircle(ofMap(torch.x,0,640,0,ofGetWidth()), ofMap(torch.y,0,480,0,ofGetHeight()), 10);
-	
 	ofSetColor(ofColor::white);
 	
 	// Draw Stuff
 	imageProcessor.draw();
-	
+
+	// Draw a Small Segment which show whats behind the mask
 	if(showContentPreview)
 		screenInfo.draw(ofGetWidth() - ofGetWidth()/scaleFactor,ofGetHeight() - ofGetHeight()/scaleFactor,ofGetWidth()/scaleFactor,ofGetHeight()/scaleFactor);
 	
-	drawGui();
+	// Draw the GUI
+	if(bDrawGui) {
+		drawGui();
+		ofPushStyle();
+		ofSetColor(ofColor::red,250);
+		ofDrawCircle(ofMap(torch.x,0,640,0,ofGetWidth()), ofMap(torch.y,0,480,0,ofGetHeight()), 10);
+		ofPopStyle();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+	if(key == OF_KEY_TAB) {
+		bDrawGui = !bDrawGui;
+	}
 }
 
 //--------------------------------------------------------------
@@ -122,6 +135,15 @@ void ofApp::drawGui() {
 	
 	if (ofxImGui::BeginWindow("Settings", mainSettings, false))
 	{
+		if( ImGui::Button("Show Content Folder") ) {
+			ofSystem("open " + ofToDataPath("Visuals",false));
+		}
+		
+		if( ImGui::Button("Reload Content") ) {
+			visualManager.reloadContent();
+		}
+		ImGui::Separator();
+		
 		ofxImGui::AddParameter(showContentPreview);
 		ofxImGui::AddParameter(disableShader);
 		
@@ -154,28 +176,55 @@ void ofApp::drawGui() {
 		ofParameterGroup d {"Visual Manager",this->visualManager.currentMode};
 		if(ofxImGui::BeginTree(d, mainSettings)) {
 			
-			static const vector<string> labels = { "Video", "Poems", "Photos","Animated Poems" };
+			static const vector<string> labels = { "Video", "Poems", "Photos","Animated Poems","Textures","Particles"};
 			ofxImGui::AddRadio(this->visualManager.currentMode, labels, 1);
 		
+			
+			ImGui::Separator();
+		
+			if( ImGui::Button("Previous Line") ) {
+				visualManager.animatedPoemHandler.previousLine();
+			}
+			ImGui::SameLine();
+			if( ImGui::Button("Next Line") ) {
+				visualManager.animatedPoemHandler.nextLine();
+			}
+			
+			ImGui::Separator();
+			if( ImGui::Button("Previous Texture") ) {
+				visualManager.textureHandler.previousTexture();
+			}
+			ImGui::SameLine();
+			if( ImGui::Button("Next Texture") ) {
+				visualManager.textureHandler.nextTexture();
+			}
+			
 			ImGui::Separator();
 			if( ImGui::Button("Previous Poem") ) {
 				visualManager.poemHandler.previousPoem();
 				visualManager.animatedPoemHandler.previousPoem();
 			}
-			
+			ImGui::SameLine();
 			if( ImGui::Button("Next Poem") ) {
 				visualManager.poemHandler.nextPoem();
 				visualManager.animatedPoemHandler.nextPoem();
 			}
-			
-			if( ImGui::Button("Previous Line") ) {
-				visualManager.animatedPoemHandler.previousLine();
+			ImGui::Separator();
+			if( ImGui::Button("Previous Particles") ) {
+				visualManager.particleHandler.previousLine();
 			}
-			
-			if( ImGui::Button("Next Line") ) {
-				visualManager.animatedPoemHandler.nextLine();
+			ImGui::SameLine();
+			if( ImGui::Button("Next Particle") ) {
+				visualManager.particleHandler.nextLine();
 			}
-			
+			ImGui::Separator();
+			if( ImGui::Button("Previous Video") ) {
+				visualManager.videoHandler.previousVideo();
+			}
+			ImGui::SameLine();
+			if( ImGui::Button("Next Video") ) {
+				visualManager.videoHandler.nextVideo();
+			}
 			ofxImGui::EndTree(mainSettings);
 		}
 	}

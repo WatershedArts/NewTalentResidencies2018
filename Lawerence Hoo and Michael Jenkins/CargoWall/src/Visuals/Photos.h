@@ -12,6 +12,7 @@
 class Photos {
 	public:
 		void loadPhotos(string dirPath) {
+			photos.clear();
 			bool b = false;
 			if(!b) {
 				ofDirectory dir(dirPath);

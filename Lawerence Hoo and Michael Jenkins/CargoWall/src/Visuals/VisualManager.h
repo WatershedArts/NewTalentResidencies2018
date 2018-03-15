@@ -13,13 +13,16 @@
 #include "Poems.h"
 #include "AnimatedPoems.h"
 #include "Photos.h"
+#include "Textures.h"
 #include "ofxImGui.h"
+#include "ParticleHandler.h"
 
 enum class VisualMode {
 	VIDEOS,
 	POEMS,
 	PHOTOS,
-	ANIMATED_POEMS
+	ANIMATED_POEMS,
+	TEXTURES
 };
 
 class VisualManager {
@@ -29,17 +32,19 @@ class VisualManager {
 		void update(float x, float y);
 		void draw();
 	
-//		VisualMode currentMode;
+		// Reloads the Contents folder
+		void reloadContent();
 	
 		Videos videoHandler;
 		Poems poemHandler;
 		Photos photoHandler;
 		AnimatedPoems animatedPoemHandler;
+		Textures textureHandler;
+		ParticleHandler particleHandler;
 	
 		ofParameter<int> currentMode { "Visual Mode", static_cast<int>(VisualMode::VIDEOS) };
-	
-		ofParameter<bool> previousPoem {"Previous Poem",false};
-		ofParameter<bool> nextPoem {"Next Poem",false};
+		ofParameter<bool> previousPoem {"Previous",false};
+		ofParameter<bool> nextPoem {"Next",false};
 };
 
 #endif /* VisualManager_h */

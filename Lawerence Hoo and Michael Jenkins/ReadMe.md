@@ -4,6 +4,11 @@ New Talent Residences 2018: Lawerence Hoo and Michael Jenkins
 ### Overview
 
 Cargo Wall is a interactive content projection system.
+The Audience are given a IR Torch which when pointed at a wall will reveal content.
+
+![Working Gif](./images/CargoWallVideo.gif)
+
+![Screen 2](./images/Screen 2.png)
 
 ### Equipment
 Here is a list of Equipment we used and where to find the products. 
@@ -35,9 +40,11 @@ Click Show Folder to expose the content directory.
 - Any Poems that need to be show should be placed in the Visual/poems folder.
 - Any Video should be placed in the Visual/videos folder.
 - Any Photos should be placed in the Visual/photos folder.
+- Any Textures should be placed in the Visual/textures folder.
 
-Click Reload. This will add the content to the application.
+Click Reload. 
 
+This will add the content to the application.
 See the next section for image calibration.
 
 ### Region of Interest
@@ -45,6 +52,15 @@ See the next section for image calibration.
 We need to constrain/rework the camera coordinates to be the same as the projector coordinates. In the Gui Click Show CV Calibration.
 
 It will open a subsection of the application, using the mouse drag the corners of the rectangle so that they roughely align with the corners of the projected image. Remember the camera won't be able to see the projected image. Once done Click Save. Next time the application opens the calibration will be automatically loaded.
+
+#### Pre Warp
+![Screen 3](./images/Screen 3.png)
+
+#### Warped
+![Screen 4](./images/Screen 4.png)
+
+#### Post Warped
+![Screen 5](./images/Screen 5.png)
 
 ### Addons Required
 
@@ -63,9 +79,9 @@ It will open a subsection of the application, using the mouse drag the corners o
 
 File | Purpose
 --- | ---
-main.cpp |ofApp.cpp |ofApp.h |
-AnimatedPoems.h |Photos.h |Poems.h |Videos.h |VisualManager.cpp |VisualManager.h |
-ofxCenteredTrueTypeFont.h |Timer.cpp | Timer.h |
-ImageProcessing.cpp |ImageProcessing.h |ImageSelection.cpp |ImageSelection.h |
+main.cpp | Runs the ofApp codeofApp.cpp | Main code threadofApp.h | 
+AnimatedPoems.h | Tweens Lines from the Poems Photos.h | Displays photos Poems.h | Loads poems and displays them on screenVideos.h | Loads Videos and displays them on screenVisualManager.cpp + .h | Handles the Visual Components of the App
+ofxCenteredTrueTypeFont.h | Small Class that centers true type to a containerTimer.cpp + .h | Custom  Timer Class
+ImageProcessing.cpp + h | Handles the Camera system and performs the openCv methods to get the torch image ImageSelection.cpp + .h | Allows us to segment the image so we can select a specific region of the camera's view.
 
 ### ToDo
