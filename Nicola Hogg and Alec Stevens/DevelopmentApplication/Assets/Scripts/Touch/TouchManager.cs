@@ -12,16 +12,28 @@ using DigitalRuby.Tween;
 [System.Serializable]
 public class TouchDial {
 
-	public bool exists;
-	public float orientation;
-	public int apex;
+    public float orientation;
 
+    [HideInInspector]
+	public bool exists;
+	
+    [HideInInspector]
+    public int apex;
+
+    [HideInInspector]
 	public Vector2 center;
 
+    [HideInInspector]
 	public float width;
-	public float height;
-	public float apexAngle;
-	public float objectAngle;
+
+    [HideInInspector]
+    public float height;
+	
+    [HideInInspector]
+    public float apexAngle;
+
+    [HideInInspector]
+    public float objectAngle;
 }
 
 //----------------------------------------------------
