@@ -8,7 +8,7 @@ The Audience are given a IR Torch which when pointed at a wall will reveal conte
 
 ![Working Gif](./images/CargoWallVideo.gif)
 
-![Screen 2](./images/Screen 2.png)
+![Screen 2](./images/Screen2.png)
 
 ### Equipment
 Here is a list of Equipment we used and where to find the products. 
@@ -54,13 +54,13 @@ We need to constrain/rework the camera coordinates to be the same as the project
 It will open a subsection of the application, using the mouse drag the corners of the rectangle so that they roughely align with the corners of the projected image. Remember the camera won't be able to see the projected image. Once done Click Save. Next time the application opens the calibration will be automatically loaded.
 
 #### Pre Warp
-![Screen 3](./images/Screen 3.png)
+![Screen 3](./images/Screen3.png)
 
 #### Warped
-![Screen 4](./images/Screen 4.png)
+![Screen 4](./images/Screen4.png)
 
 #### Post Warped
-![Screen 5](./images/Screen 5.png)
+![Screen 5](./images/Screen5.png)
 
 ### Addons Required
 
