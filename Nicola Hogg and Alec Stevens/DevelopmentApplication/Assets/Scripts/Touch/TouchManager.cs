@@ -41,6 +41,7 @@ public class TouchDial {
 //----------------------------------------------------
 public class TouchManager : MonoBehaviour {
 
+    public ParticleSystem ps;
     public TextMeshProUGUI angle;
 	public static TouchManager Instance { set; get; }
 	public Slider tunerSlider;
@@ -49,9 +50,46 @@ public class TouchManager : MonoBehaviour {
     [Range(0f, 2f)]
     public float tuningThreshold = 0.2f;
     bool isPlaying = false;
+    bool isTunerHidden = true;
+
+    private void Start()
+	{
+        Debug.Log("Touch Manager: Started");
+        FindObjectOfType<AudioManager>().Play("Static");
 
 
+        fingers[0].gameObject.SetActive(false);
+        fingers[1].gameObject.SetActive(false);
+        fingers[2].gameObject.SetActive(false);
+	}
+
+	//----------------------------------------------------
+	// Check if the user has tuned to any of the frequencies
+	//----------------------------------------------------
+	void checkTuningStatus(float d) {
+
+        foreach (Beacon b in BeaconManager.Instance.beacons)
+        {
             if ((d > (b.data.tuning - tuningThreshold) && d < (b.data.tuning + tuningThreshold) )) {
+                // We are in range but are we playing
+                if (!b.data.isPlaying)
+                {
+                    FindObjectOfType<AudioManager>().Stop("Static");
+                    FindObjectOfType<AudioManager>().Play(b.data.beaconid);
+                    Debug.Log("Tuned to Beacon: " + b.data.beaconid);
+                    b.data.isPlaying = true;
+                }
+            }
+            else if (b.data.isPlaying)
+            {
+                // Out of Range but still playing
+                FindObjectOfType<AudioManager>().Play("Static");
+                FindObjectOfType<AudioManager>().Stop(b.data.beaconid);
+                Debug.Log("Detuned from Beacon: " + b.data.beaconid);
+                b.data.isPlaying = false;
+            }
+        }
+    }
 
     //----------------------------------------------------
     // Update Loop
@@ -59,70 +97,132 @@ public class TouchManager : MonoBehaviour {
     void Update()
     {
 #if UNITY_EDITOR
-        if (Input.GetMouseButton(0) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0))
         {
+            if (ps.isPlaying)
+            {
+                ps.Stop();
+            }
+
+            if (!fingers[0].gameObject.activeSelf)
+            {
+                fingers[0].gameObject.SetActive(true);
+                fingers[1].gameObject.SetActive(true);
+                fingers[2].gameObject.SetActive(true);
+            }
             Vector2 mouse = Input.mousePosition;
             fingers[0].transform.position = mouse;
+        }
+        else if (Input.GetMouseButtonUp(0) && fingers[0].gameObject.activeSelf)
+        {
+            if (!ps.isPlaying)
+            {
+                ps.Play();
+            }
+
+            fingers[0].gameObject.SetActive(false);
+            fingers[1].gameObject.SetActive(false);
+            fingers[2].gameObject.SetActive(false);
         }
 
         float d = dial.orientation.Map(0f, 360f, 88.0f, 108.0f);
         angle.SetText(" Orig Rot: {0} Mapped Rot: {1:1} ", dial.orientation, d);
         tunerSlider.value = d;
 
-        if ((d > 101.5f && d < 102.5) && !isPlaying)
-        {
-            FindObjectOfType<AudioManager>().Play("Beacon1");
-            isPlaying = true;
-        }
-        else if ((d < 101.5f && d > 102.5) && isPlaying)
-        {
-            FindObjectOfType<AudioManager>().Stop("Beacon1");
-            isPlaying = false;
-        }
-
-#endif
-
+        checkTuningStatus(d);
+#else 
         if (Input.touchCount == 3)
         {
+
             calculateDial(Input.touches);
+            
             for (int i = 0; i < Input.touchCount; i++)
             {
                 fingers[i].transform.position = new Vector3(Input.touches[i].position.x, Input.touches[i].position.y, 0.0f);
             }
+
+            if(ps.isPlaying) 
+            {
+                ps.Stop();
+            }
+
+            if (fingers.Length != 0)
+            {
+                if (!fingers[0].gameObject.activeSelf)
+                {
+                    fingers[0].gameObject.SetActive(true);
+                    fingers[1].gameObject.SetActive(true);
+                    fingers[2].gameObject.SetActive(true);
+                }
+            }
         }
+        else if (Input.touchCount < 3) {
+
+            if(!ps.isPlaying) {
+                ps.Play();
+            }
+
+            if (fingers.Length != 0)
+            {
+                if (fingers[0].gameObject.activeSelf)
+                {
+                    fingers[0].gameObject.SetActive(false);
+                    fingers[1].gameObject.SetActive(false);
+                    fingers[2].gameObject.SetActive(false);
+                }
+            }
+        }
+#endif
+
+
     }
 
     //----------------------------------------------------
     // Hide the Tuner
     //----------------------------------------------------
     public void hideTuner(){
+        if (!isTunerHidden) 
+        {
+            RectTransform r = tunerSlider.GetComponent<RectTransform>();
+            float currentPos = -150f;//r.transform.position.y;
+            float endPos = 80f;//r.transform.position.y + 78f;
 
-        RectTransform r = tunerSlider.GetComponent<RectTransform>();
-        float currentPos = r.transform.position.y;
-        float endPos = r.transform.position.y + 78f;
-
-        TweenFactory.Tween("Hide Tuner", currentPos,endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut,(t) => {
-            Vector3 e = new Vector3(r.transform.position.x, t.CurrentValue);
-            tunerSlider.transform.SetPositionAndRotation(e, Quaternion.identity);
-        },(t) => {
-            print("Done Hide");
-        });
+            TweenFactory.Tween("Hide Tuner", currentPos, endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut, (t) =>
+            {
+                Vector3 e = new Vector3(r.anchoredPosition.x, t.CurrentValue);
+                tunerSlider.GetComponent<RectTransform>().anchoredPosition = e;
+            }, (t) =>
+            {
+                FindObjectOfType<AudioManager>().Stop("Static");
+                Debug.Log("Done Hide");
+                isTunerHidden = true;
+            });
+        }
     }
 
     //----------------------------------------------------
     // Show the Tuner
     //----------------------------------------------------
-    public void showTuner() {
-        RectTransform r = tunerSlider.GetComponent<RectTransform>();
-        float currentPos = r.transform.position.y;
-        float endPos = r.transform.position.y - 78f;
+    public void showTuner()
+    {
+        if (isTunerHidden) 
+        {
+            RectTransform r = tunerSlider.GetComponent<RectTransform>();
+            float currentPos = 80f;//r.transform.position.y;
+            float endPos = -150f;//r.transform.position.y - 78f;
 
-        TweenFactory.Tween("Show Tuner", currentPos, endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut, (t) => {
-            Vector3 e = new Vector3(r.transform.position.x, t.CurrentValue);
-            tunerSlider.transform.SetPositionAndRotation(e, Quaternion.identity);
-        }, (t) => {
-            print("Done Show");
-        });
+            TweenFactory.Tween("Show Tuner", currentPos, endPos, 1.0f, TweenScaleFunctions.CubicEaseInOut, (t) =>
+            {
+                Vector3 e = new Vector3(r.anchoredPosition.x, t.CurrentValue);
+                tunerSlider.GetComponent<RectTransform>().anchoredPosition = e;
+                //tunerSlider.transform.SetPositionAndRotation(e, Quaternion.identity);
+            }, (t) =>
+            {
+                FindObjectOfType<AudioManager>().Play("Static");
+                Debug.Log("Done Show");
+                isTunerHidden = false;
+            });
+        }
     }
 
 	//----------------------------------------------------
@@ -142,15 +242,7 @@ public class TouchManager : MonoBehaviour {
         angle.SetText("Orig Rot: {0} Mapped Rot: {1:1}", dial.orientation,d);
         tunerSlider.value = d;
 
-
-        if ((d > 101.5f && d < 102.5) && !isPlaying) {
-            FindObjectOfType<AudioManager>().Play("Beacon1");
-            isPlaying = true;
-        }
-        else if((d < 101.5f && d > 102.5) && isPlaying) {
-            FindObjectOfType<AudioManager>().Stop("Beacon1");
-            isPlaying = false;
-        }
+        checkTuningStatus(d);
 	}
 
 	//----------------------------------------------------
@@ -262,8 +354,7 @@ public class TouchManager : MonoBehaviour {
 		}
 
 		Vector2 ab = new Vector2((b.x - a.x),(b.y - a.y));
-		Vector2 cb = new Vector2((b.x - c.x),(b.y - c.y));
-
+        Vector2 cb = new Vector2((b.x - c.x), (b.y - c.y));
 
 		float dotProduct = Vector2.Dot(ab,cb);
 		float crossProduct = (ab.x * cb.y - ab.y * cb.x);

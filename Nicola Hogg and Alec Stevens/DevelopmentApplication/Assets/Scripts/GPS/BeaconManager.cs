@@ -7,7 +7,6 @@ public class BeaconManager : MonoBehaviour {
 
 	public Beacon prefab;
 	public static BeaconManager Instance { set; get; }
-
 	public List<Beacon> beacons = new List<Beacon>();
 	public BeaconCollection beaconsData;
 

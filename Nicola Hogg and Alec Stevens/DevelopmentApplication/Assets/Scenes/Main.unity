@@ -2668,6 +2668,13 @@ MonoBehaviour:
     source: {fileID: 0}
     loop: 0
     hasPlayed: 0
+  - name: Beacon3
+    clip: {fileID: 8300000, guid: d893c5b39b129467fb85722399e8fd2b, type: 3}
+    volume: 0.86
+    pitch: 1
+    source: {fileID: 0}
+    loop: 0
+    hasPlayed: 0
   - name: Static
     clip: {fileID: 8300000, guid: 1ac47b96eb659472e9f3b9c367fe203d, type: 3}
     volume: 0.86
