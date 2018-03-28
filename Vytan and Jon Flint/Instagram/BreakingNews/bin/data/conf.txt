@@ -1,0 +1,5 @@
+displayaddress:161
+pin:4
+folder:/Users/david/Desktop/PM Studio Residents/New Talent 2018/Vytan and Jon Flint/Instagram/media/
+gracetime:1000
+tweentime:1000
